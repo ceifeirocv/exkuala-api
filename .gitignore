@@ -59,6 +59,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # CodeGraph data files
 # These are local to each machine and should not be committed
 **/.codegraph
-
-# GSD planning docs (local only)
-.planning/
