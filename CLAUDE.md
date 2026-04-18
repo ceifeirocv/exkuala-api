@@ -42,3 +42,41 @@ At the start of a session, ask the user if they'd like to initialize CodeGraph:
 "I notice this project doesn't have CodeGraph initialized. Would you like me to run `codegraph init -i` to build a code knowledge graph?"
 
 <!-- CODEGRAPH_END -->
+
+<!-- GSD_START -->
+
+## Project: Cultural Agenda API
+
+This is a NestJS REST API for a cultural events discovery platform. See `.planning/` for full context.
+
+**Stack:** NestJS 11 · PostgreSQL · Prisma · Auth0 (JWT/JWKS) · TypeScript
+
+**Current phase:** Phase 1 — Foundation
+
+### GSD Workflow
+
+This project uses GSD for structured, phase-driven development.
+
+**Key commands:**
+- `/gsd-discuss-phase [N]` — Gather context before planning a phase
+- `/gsd-plan-phase [N]` — Create detailed plan for a phase
+- `/gsd-execute-phase [N]` — Execute all plans in a phase
+- `/gsd-progress` — Check current project status
+
+**Planning artifacts:**
+- `.planning/PROJECT.md` — Project context and requirements
+- `.planning/ROADMAP.md` — 9-phase roadmap (33 requirements)
+- `.planning/REQUIREMENTS.md` — Full requirement list with traceability
+- `.planning/research/` — Domain research (stack, features, architecture, pitfalls)
+
+### Critical Decisions (must respect in every phase)
+
+1. **Auth0 custom claims namespace** — must be set before Phase 2 (e.g. `https://exkuala.app/roles`)
+2. **ORM = Prisma** — schema-first, no TypeORM decorators
+3. **Soft delete from day one** — `deletedAt` on Event; never physically delete
+4. **Cursor-based pagination** — built into first event listing endpoint
+5. **Image strategy = external URLs** — no S3/file upload in v1
+6. **JWKS caching** — `jwks-rsa` must have `cache: true`; never fetch per-request
+7. **Local user sync** — upsert User row in `validate()` before RSVP/organizer FKs are created
+
+<!-- GSD_END -->
