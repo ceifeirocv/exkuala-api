@@ -2,7 +2,7 @@
 
 <!-- Context7_START -->
 
-**Always use** Context7 when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
+Always use Context7 when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
 
 <!-- Context7_END -->
 
@@ -58,12 +58,14 @@ This is a NestJS REST API for a cultural events discovery platform. See `.planni
 This project uses GSD for structured, phase-driven development.
 
 **Key commands:**
+
 - `/gsd-discuss-phase [N]` — Gather context before planning a phase
 - `/gsd-plan-phase [N]` — Create detailed plan for a phase
 - `/gsd-execute-phase [N]` — Execute all plans in a phase
 - `/gsd-progress` — Check current project status
 
 **Planning artifacts:**
+
 - `.planning/PROJECT.md` — Project context and requirements
 - `.planning/ROADMAP.md` — 9-phase roadmap (33 requirements)
 - `.planning/REQUIREMENTS.md` — Full requirement list with traceability
