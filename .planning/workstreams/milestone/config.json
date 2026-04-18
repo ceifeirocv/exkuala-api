@@ -1,0 +1,25 @@
+{
+  "git": {
+    "quick_branch_template": null,
+    "branching_strategy": "none"
+  },
+  "hooks": {
+    "context_warnings": false,
+    "workflow_guard": true
+  },
+  "workflow": {
+    "research": true,
+    "research_before_questions": false,
+    "plan_check": true,
+    "skip_discuss": false,
+    "ai_integration_phase": false,
+    "text_mode": false,
+    "ui_safety_gate": true,
+    "auto_advance": false,
+    "use_worktrees": true,
+    "verifier": true,
+    "nyquist_validation": true,
+    "ui_phase": true
+  },
+  "model_profile": "budget"
+}
