@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  auth0Id   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Event {
+  id                String      @id @default(cuid())
+  title             String
+  description       String?
+  startAt           DateTime
+  endAt             DateTime?
+  venueName         String?
+  address           String?
+  categoryId        String?
+  ticketPrice       Decimal?    @db.Decimal(10, 2)
+  externalTicketUrl String?
+  status            EventStatus @default(DRAFT)
+  organizerId       String?
+  deletedAt         DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@map("events")
+}
