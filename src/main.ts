@@ -44,9 +44,8 @@ async function bootstrap() {
     SwaggerModule.setup('api/docs', app, document);
   }
 
-  // Prisma 7: replaces the removed $on('beforeExit') lifecycle hook.
-  // Without this, PrismaService.onModuleDestroy() will not fire on SIGTERM
-  // and connections will leak on graceful shutdown (01-01 carry-forward).
+  // enableShutdownHooks ensures NestJS lifecycle hooks (OnModuleDestroy) fire on SIGTERM.
+  // TypeORM connection pool will be properly closed on graceful shutdown.
   app.enableShutdownHooks();
 
   await app.listen(process.env.PORT ?? 3000);
