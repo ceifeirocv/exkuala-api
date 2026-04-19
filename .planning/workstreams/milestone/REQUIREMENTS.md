@@ -53,6 +53,10 @@
 - [ ] **ADMIN-03**: Admin can approve or reject organizer applications (see ORG-02)
 - [ ] **ADMIN-04**: Admin can unpublish or remove events (see EVT-03)
 
+### Security (SEC)
+
+- [x] **SEC-01**: All string database columns have explicit `VarChar` length limits to prevent oversized input from reaching the database; DTOs mirror these limits with `@MaxLength` decorators
+
 ### Internationalization (I18N)
 
 - [ ] **I18N-01**: Event title and description support translations via a separate `event_translations` table (locale, title, description)
@@ -121,5 +125,6 @@
 | I18N-01 | Phase 7 — Public Event Discovery | Pending |
 | I18N-02 | Phase 4 — Categories | Pending |
 | I18N-03 | Phase 7 — Public Event Discovery | Pending |
+| SEC-01 | Phase 1 — Foundation | Complete |
 
-**Coverage: 33/33 v1 requirements mapped. 100%.**
+**Coverage: 34/34 v1 requirements mapped. 100%.**

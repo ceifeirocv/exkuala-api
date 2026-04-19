@@ -28,7 +28,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 ### Phase 1: Foundation
 **Goal**: The project runs with a production-quality base: database connected, config validated, API versioned, and developer tooling active
 **Depends on**: Nothing (first phase)
-**Requirements**: *(No REQ-IDs — infrastructure enabling all subsequent phases)*
+**Requirements**: SEC-01
 **Success Criteria** (what must be TRUE):
   1. `GET /api/v1/` returns a response, confirming URI versioning and global prefix are active
   2. Prisma client connects to PostgreSQL and migrations run without error
