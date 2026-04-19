@@ -73,6 +73,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18
-Stopped at: Phase 1 context gathered — ready to plan
-Resume file: .planning/workstreams/milestone/phases/01-foundation/01-CONTEXT.md
+Last session: 2026-04-19
+Stopped at: Phase 1.1 context gathered — ready to plan
+Resume file: .planning/phases/1.1-migrate-from-prisma-to-typeorm/1.1-CONTEXT.md
