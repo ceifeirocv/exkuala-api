@@ -49,6 +49,10 @@ Recent decisions affecting current work:
 - Cursor-based pagination built into first event listing endpoint
 - Image strategy: external URLs only, no S3 pipeline in v1
 
+### Roadmap Evolution
+
+- Phase 1.1 inserted after Phase 1: Migrate from prisma to typeorm (URGENT)
+
 ### Pending Todos
 
 None yet.

@@ -12,6 +12,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 ## Phases
 
 - [x] **Phase 1: Foundation** - Prisma, ConfigModule, global pipes, Swagger, URI versioning *(complete 2026-04-18)*
+- [ ] **Phase 1.1: Migrate from prisma to typeorm** *(INSERTED)*
 - [ ] **Phase 2: Auth Infrastructure** - JWT guard chain, JWKS validation, role enforcement, public bypass
 - [ ] **Phase 3: Users** - Local user record, auth0Id upsert on first authenticated request
 - [ ] **Phase 4: Categories** - Managed category list with admin CRUD and i18n translations
@@ -40,6 +41,22 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 Plans:
 - [x] 01-01: Prisma setup, schema baseline, and migration pipeline
 - [x] 01-02: ConfigModule, environment validation, global pipes, URI versioning, and Swagger
+
+---
+
+### Phase 1.1: Migrate from prisma to typeorm *(INSERTED)*
+**Goal**: Replace Prisma ORM with TypeORM across the entire codebase
+**Depends on**: Phase 1
+**Requirements**: TBD
+**Success Criteria** (what must be TRUE):
+  1. All Prisma schema models are replicated as TypeORM entities
+  2. All database queries use TypeORM repositories/query builder
+  3. Migrations are managed by TypeORM
+  4. Application starts and passes all existing tests with TypeORM
+**Plans**: TBD
+
+Plans:
+- [ ] 1.1-01: TypeORM setup, entity migration, repository wiring
 
 ---
 
@@ -187,6 +204,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/2 | Not started | - |
+| 1.1. Migrate from prisma to typeorm *(INSERTED)* | 0/1 | Not started | - |
 | 2. Auth Infrastructure | 0/2 | Not started | - |
 | 3. Users | 0/1 | Not started | - |
 | 4. Categories | 0/2 | Not started | - |
