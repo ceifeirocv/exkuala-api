@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 2 — Auth Infrastructure
+**Current focus:** Phase 2 — Auth Infrastructure (Phase 1.1 complete 2026-04-19)
 
 ## Current Position
 
@@ -55,7 +55,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- [ ] Fix pnpm/npm SSL and config warnings on `migration:run`: (1) npm config bleedthrough (`npm-globalconfig`, `verify-deps-before-run`, `_jsr-registry`) — clean up global npm config; (2) pg-connection-string SSL mode deprecation — upgrade to `pg-connection-string` v3 or add `sslmode=verify-full` to DATABASE_URL when SSL is used.
 
 ### Blockers/Concerns
 

@@ -12,7 +12,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 ## Phases
 
 - [x] **Phase 1: Foundation** - Prisma, ConfigModule, global pipes, Swagger, URI versioning *(complete 2026-04-18)*
-- [ ] **Phase 1.1: Migrate from prisma to typeorm** *(INSERTED)*
+- [x] **Phase 1.1: Migrate from prisma to typeorm** *(complete 2026-04-19)*
 - [ ] **Phase 2: Auth Infrastructure** - JWT guard chain, JWKS validation, role enforcement, public bypass
 - [ ] **Phase 3: Users** - Local user record, auth0Id upsert on first authenticated request
 - [ ] **Phase 4: Categories** - Managed category list with admin CRUD and i18n translations
@@ -56,12 +56,12 @@ Plans:
 **Plans**: 6 plans in 4 waves
 
 Plans:
-- [ ] 1.1-01-PLAN.md — Wave 0: Entity spec stubs (user.entity.spec.ts, event.entity.spec.ts)
-- [ ] 1.1-02-PLAN.md — Wave 1: Package changes (install TypeORM, remove Prisma, update scripts)
-- [ ] 1.1-03-PLAN.md — Wave 1: TypeORM entities (UserEntity, EventEntity with full Prisma schema parity)
-- [ ] 1.1-04-PLAN.md — Wave 1: Infrastructure (data-source.ts + baseline migration)
-- [ ] 1.1-05-PLAN.md — Wave 2: AppModule wiring + Prisma file deletion
-- [ ] 1.1-06-PLAN.md — Wave 3: [BLOCKING] migration:run + phase verification
+- [x] 1.1-01-PLAN.md — Wave 0: Entity spec stubs (user.entity.spec.ts, event.entity.spec.ts)
+- [x] 1.1-02-PLAN.md — Wave 1: Package changes (install TypeORM, remove Prisma, update scripts)
+- [x] 1.1-03-PLAN.md — Wave 1: TypeORM entities (UserEntity, EventEntity with full Prisma schema parity)
+- [x] 1.1-04-PLAN.md — Wave 1: Infrastructure (data-source.ts + baseline migration)
+- [x] 1.1-05-PLAN.md — Wave 2: AppModule wiring + Prisma file deletion
+- [x] 1.1-06-PLAN.md — Wave 3: [BLOCKING] migration:run + phase verification
 
 ---
 
@@ -209,7 +209,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-04-18 |
-| 1.1. Migrate from prisma to typeorm *(INSERTED)* | 0/6 | Not started | - |
+| 1.1. Migrate from prisma to typeorm *(INSERTED)* | 6/6 | Complete | 2026-04-19 |
 | 2. Auth Infrastructure | 0/2 | Not started | - |
 | 3. Users | 0/1 | Not started | - |
 | 4. Categories | 0/2 | Not started | - |
