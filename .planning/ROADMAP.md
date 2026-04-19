@@ -36,7 +36,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
   3. Swagger UI is accessible at `/api/docs` and reflects all registered routes
   4. Environment variables are validated at startup — missing required vars crash the process with a clear error before any request is served
   5. Global validation pipe rejects malformed request bodies with structured 400 errors
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
 - [x] 01-01: Prisma setup, schema baseline, and migration pipeline
@@ -47,16 +47,21 @@ Plans:
 ### Phase 1.1: Migrate from prisma to typeorm *(INSERTED)*
 **Goal**: Replace Prisma ORM with TypeORM across the entire codebase
 **Depends on**: Phase 1
-**Requirements**: TBD
+**Requirements**: TBD (infrastructure phase — validated against success criteria below)
 **Success Criteria** (what must be TRUE):
   1. All Prisma schema models are replicated as TypeORM entities
   2. All database queries use TypeORM repositories/query builder
   3. Migrations are managed by TypeORM
   4. Application starts and passes all existing tests with TypeORM
-**Plans**: TBD
+**Plans**: 6 plans in 4 waves
 
 Plans:
-- [ ] 1.1-01: TypeORM setup, entity migration, repository wiring
+- [ ] 1.1-01-PLAN.md — Wave 0: Entity spec stubs (user.entity.spec.ts, event.entity.spec.ts)
+- [ ] 1.1-02-PLAN.md — Wave 1: Package changes (install TypeORM, remove Prisma, update scripts)
+- [ ] 1.1-03-PLAN.md — Wave 1: TypeORM entities (UserEntity, EventEntity with full Prisma schema parity)
+- [ ] 1.1-04-PLAN.md — Wave 1: Infrastructure (data-source.ts + baseline migration)
+- [ ] 1.1-05-PLAN.md — Wave 2: AppModule wiring + Prisma file deletion
+- [ ] 1.1-06-PLAN.md — Wave 3: [BLOCKING] migration:run + phase verification
 
 ---
 
@@ -203,8 +208,8 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Not started | - |
-| 1.1. Migrate from prisma to typeorm *(INSERTED)* | 0/1 | Not started | - |
+| 1. Foundation | 2/2 | Complete | 2026-04-18 |
+| 1.1. Migrate from prisma to typeorm *(INSERTED)* | 0/6 | Not started | - |
 | 2. Auth Infrastructure | 0/2 | Not started | - |
 | 3. Users | 0/1 | Not started | - |
 | 4. Categories | 0/2 | Not started | - |
