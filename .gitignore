@@ -65,3 +65,31 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Prisma generated client (Prisma 7 — regenerated via `prisma generate`)
 /src/generated
+
+# ── GSD baseline (auto-generated) ──
+.gsd
+.gsd-id
+.mcp.json
+.bg-shell/
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+.env.*
+!.env.example
+node_modules/
+.next/
+dist/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+target/
+vendor/
+coverage/
+.cache/
+tmp/
