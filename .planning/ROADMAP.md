@@ -74,7 +74,7 @@ Plans:
   2. A route decorated with `@Roles('admin')` returns 403 for a `user`-role token and 200 for an `admin`-role token
   3. A route decorated with `@Public()` returns 200 without any Authorization header
   4. JWKS keys are cached — the JWKS endpoint is not called on every request
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
 - [ ] 02-01: JwtStrategy (jwks-rsa, RS256, cache enabled), JwtAuthGuard, RolesGuard, @Roles() decorator
