@@ -1,7 +1,7 @@
 {
   "git": {
     "quick_branch_template": null,
-    "branching_strategy": "none"
+    "branching_strategy": "phase"
   },
   "hooks": {
     "context_warnings": true,
@@ -12,14 +12,29 @@
     "research_before_questions": true,
     "plan_check": true,
     "skip_discuss": false,
-    "ai_integration_phase": false,
+    "ai_integration_phase": true,
     "text_mode": false,
     "ui_safety_gate": true,
     "auto_advance": false,
     "use_worktrees": true,
     "verifier": true,
     "nyquist_validation": true,
-    "ui_phase": true
+    "ui_phase": true,
+    "pattern_mapper": true,
+    "tdd_mode": false,
+    "code_review": true,
+    "code_review_depth": "standard",
+    "ui_review": true
   },
-  "model_profile": "budget"
+  "commit_docs": true,
+  "model_profile": "budget",
+  "intel": {
+    "enabled": true
+  },
+  "graphify": {
+    "enabled": true
+  },
+  "firecrawl": "fc-e9efb3f0863d47ae8c81e1ec92d4db3b",
+  "exa_search": "2c0d48af-521a-4e2e-9eeb-f9ebf7605adc",
+  "search_gitignored": false
 }
