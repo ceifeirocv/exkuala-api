@@ -77,7 +77,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: JwtStrategy (jwks-rsa, RS256, cache enabled), JwtAuthGuard, RolesGuard, @Roles() decorator
+- [x] 02-01: JwtStrategy (jwks-rsa, RS256, cache enabled), JwtAuthGuard, RolesGuard, @Roles() decorator
 - [ ] 02-02: @Public() decorator, OptionalJwtAuthGuard, guard integration tests
 
 ---
