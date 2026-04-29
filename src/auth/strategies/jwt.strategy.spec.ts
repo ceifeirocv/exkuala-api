@@ -50,5 +50,13 @@ describe('JwtStrategy', () => {
       const result = strategy.validate(payload);
       expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
     });
+
+    it('returns empty roles when namespace claim is explicitly undefined', () => {
+      const config = { get: mockConfig } as unknown as ConfigService;
+      const strategy = new JwtStrategy(config);
+      const payload = { sub: 'auth0|abc123', 'https://exkuala.cv/roles': undefined };
+      const result = strategy.validate(payload);
+      expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
+    });
   });
 });

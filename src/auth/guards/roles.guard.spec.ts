@@ -47,5 +47,13 @@ describe('RolesGuard', () => {
         .mockReturnValueOnce(['admin']); // ROLES_KEY
       expect(guard.canActivate(mockContext({ roles: ['user'] }))).toBe(false);
     });
+
+    it('returns false without throwing when user is undefined and @Roles() is required', () => {
+      jest.spyOn(reflector, 'getAllAndOverride')
+        .mockReturnValueOnce(false)       // IS_PUBLIC_KEY
+        .mockReturnValueOnce(['admin']);   // ROLES_KEY
+      // user is undefined — should return false, not throw TypeError
+      expect(guard.canActivate(mockContext(undefined))).toBe(false);
+    });
   });
 });
