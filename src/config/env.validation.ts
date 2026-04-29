@@ -9,6 +9,18 @@ export class EnvironmentVariables {
   @Min(1)
   @Max(65535)
   PORT!: number;
+
+  @IsString()
+  AUTH0_JWKS_URI!: string;
+
+  @IsString()
+  AUTH0_AUDIENCE!: string;
+
+  @IsString()
+  AUTH0_ISSUER!: string;
+
+  @IsString()
+  AUTH0_NAMESPACE!: string;
 }
 
 export function validate(config: Record<string, unknown>): EnvironmentVariables {

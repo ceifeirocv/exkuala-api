@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { validate } from './config/env.validation';
 import { EventEntity } from './events/event.entity';
 import { UserEntity } from './users/user.entity';
@@ -28,6 +29,7 @@ import { UserEntity } from './users/user.entity';
         logging: cfg.get<string>('NODE_ENV') === 'development',
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
