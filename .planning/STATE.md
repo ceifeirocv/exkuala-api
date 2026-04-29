@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-04-29T16:52:45.846Z"
+stopped_at: Phase 2 complete — ready for Phase 3
+last_updated: "2026-04-29T17:30:00.000Z"
 last_activity: 2026-04-29
 progress:
   total_phases: 10
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 2 — Auth Infrastructure (Phase 1.1 complete 2026-04-19)
+**Current focus:** Phase 3 — Users (Phase 2 complete 2026-04-29)
 
 ## Current Position
 
-Phase: 2 of 9 (Auth Infrastructure)
-Plan: 2 of 2 in current phase
-Status: Ready to execute
+Phase: 3 of 9 (Users)
+Plan: 0 of 1 in current phase
+Status: Ready to discuss/plan
 Last activity: 2026-04-29
 
 Progress: [██████████] 100%
@@ -78,7 +78,8 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-- [Pre-Phase 2]: Auth0 custom claims namespace must be configured in Auth0 Action AND hardcoded in JwtStrategy before writing any guard — must agree before Phase 2 begins
+- [RESOLVED - Phase 2]: Auth0 namespace `https://exkuala.cv/roles` implemented via AUTH0_NAMESPACE env var in JwtStrategy
+- [Pre-Phase 3]: Four Auth0 env vars (AUTH0_JWKS_URI, AUTH0_AUDIENCE, AUTH0_ISSUER, AUTH0_NAMESPACE) must be set in .env before app starts
 
 ## Deferred Items
 
