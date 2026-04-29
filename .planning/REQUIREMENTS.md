@@ -7,7 +7,7 @@
 - [x] **AUTH-01**: System validates Auth0 JWT tokens on protected routes using jwks-rsa (RS256)
 - [x] **AUTH-02**: System enforces role-based access (roles: `user`, `organizer`, `admin`) via Auth0 custom claims
 - [ ] **AUTH-03**: System upserts a local User record on first authenticated request (auth0Id as identity key)
-- [ ] **AUTH-04**: Public routes are accessible without authentication (`@Public()` decorator bypasses JWT guard)
+- [x] **AUTH-04**: Public routes are accessible without authentication (`@Public()` decorator bypasses JWT guard)
 
 ### Organizers (ORG)
 
@@ -95,7 +95,7 @@
 | AUTH-01 | Phase 2 — Auth Infrastructure | Complete |
 | AUTH-02 | Phase 2 — Auth Infrastructure | Complete |
 | AUTH-03 | Phase 3 — Users | Pending |
-| AUTH-04 | Phase 2 — Auth Infrastructure | Pending |
+| AUTH-04 | Phase 2 — Auth Infrastructure | Complete |
 | ORG-01 | Phase 5 — Organizers | Pending |
 | ORG-02 | Phase 5 — Organizers | Pending |
 | ORG-03 | Phase 5 — Organizers | Pending |
