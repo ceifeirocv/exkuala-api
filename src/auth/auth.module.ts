@@ -10,6 +10,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   imports: [PassportModule],
   providers: [
     JwtStrategy,
+    JwtAuthGuard,
+    OptionalJwtAuthGuard,
     { provide: APP_GUARD, useClass: JwtAuthGuard },  // #1 — sets req.user
     { provide: APP_GUARD, useClass: RolesGuard },     // #2 — reads req.user.roles
   ],
