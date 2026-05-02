@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to discuss/plan
-stopped_at: Phase 02.1 context gathered
-last_updated: "2026-05-02T12:13:19.091Z"
-last_activity: 2026-04-29
+status: executing
+stopped_at: Completed 02.1-01-PLAN.md
+last_updated: "2026-05-02T18:26:29Z"
+last_activity: 2026-05-02
 progress:
   total_phases: 11
   completed_phases: 3
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 3 — Users (Phase 2 complete 2026-04-29)
+**Current focus:** Phase 02.1 — Auth0 webhook endpoint (executing Wave 0 → Wave 1)
 
 ## Current Position
 
-Phase: 3 of 9 (Users)
-Plan: 0 of 1 in current phase
-Status: Ready to discuss/plan
-Last activity: 2026-04-29
+Phase: 02.1 (Auth0 webhook endpoint)
+Plan: 1 of 4 complete
+Status: Executing — Wave 0 done, Wave 1 next (02.1-02 + 02.1-03 parallel)
+Last activity: 2026-05-02
 
 Progress: [██████████] 100%
 
@@ -67,6 +67,8 @@ Recent decisions affecting current work:
 - Soft delete (`deletedAt`) goes on Event in Phase 1 migration — retrofitting later is costly
 - Cursor-based pagination built into first event listing endpoint
 - Image strategy: external URLs only, no S3 pipeline in v1
+- Wave 0 RED stubs import non-existent source files at import level (not assertion level) to guarantee live test failure
+- Controller spec uses direct instantiation (no TestingModule); service spec uses TestingModule + getRepositoryToken
 
 ### Roadmap Evolution
 
@@ -94,6 +96,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-02T12:13:19.044Z
-Stopped at: Phase 02.1 context gathered
-Resume file: .planning/phases/02.1-add-a-webhook-endpoint-for-auth0-to-add-or-refresh-user-on-c/02.1-CONTEXT.md
+Last session: 2026-05-02T18:26:29Z
+Stopped at: Completed 02.1-01-PLAN.md (Wave 0 RED stubs)
+Resume file: .planning/phases/02.1-add-a-webhook-endpoint-for-auth0-to-add-or-refresh-user-on-c/02.1-02-PLAN.md
