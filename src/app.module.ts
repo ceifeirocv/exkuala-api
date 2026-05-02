@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { validate } from './config/env.validation';
+import { WebhooksModule } from './webhooks/webhooks.module';
 import { EventEntity } from './events/event.entity';
 import { UserEntity } from './users/user.entity';
 
@@ -30,6 +31,7 @@ import { UserEntity } from './users/user.entity';
       }),
     }),
     AuthModule,
+    WebhooksModule,   // registers /api/v1/webhooks/auth0 endpoint
   ],
   controllers: [AppController],
   providers: [AppService],

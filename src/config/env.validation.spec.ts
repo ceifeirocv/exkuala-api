@@ -2,10 +2,15 @@ import 'reflect-metadata';
 import { validate, EnvironmentVariables } from './env.validation';
 
 describe('validate (env)', () => {
-  it('returns a validated EnvironmentVariables instance when DATABASE_URL and PORT are present', () => {
+  it('returns a validated EnvironmentVariables instance when all required vars are present', () => {
     const result = validate({
       DATABASE_URL: 'postgresql://localhost/test',
       PORT: '3000',
+      AUTH0_JWKS_URI: 'https://example.auth0.com/.well-known/jwks.json',
+      AUTH0_AUDIENCE: 'https://api.example.com',
+      AUTH0_ISSUER: 'https://example.auth0.com/',
+      AUTH0_NAMESPACE: 'https://example.com',
+      WEBHOOK_SECRET: 'secret',
     });
     expect(result).toBeInstanceOf(EnvironmentVariables);
     expect(result.DATABASE_URL).toBe('postgresql://localhost/test');
@@ -44,6 +49,11 @@ describe('validate (env)', () => {
     const result = validate({
       DATABASE_URL: 'postgresql://localhost/test',
       PORT: '3000',
+      AUTH0_JWKS_URI: 'https://example.auth0.com/.well-known/jwks.json',
+      AUTH0_AUDIENCE: 'https://api.example.com',
+      AUTH0_ISSUER: 'https://example.auth0.com/',
+      AUTH0_NAMESPACE: 'https://example.com',
+      WEBHOOK_SECRET: 'secret',
       SOMETHING_ELSE: 'ignored',
     });
     expect(result.DATABASE_URL).toBe('postgresql://localhost/test');
