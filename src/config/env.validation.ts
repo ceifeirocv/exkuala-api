@@ -21,6 +21,9 @@ export class EnvironmentVariables {
 
   @IsString()
   AUTH0_NAMESPACE!: string;
+
+  @IsString()
+  WEBHOOK_SECRET!: string;
 }
 
 export function validate(config: Record<string, unknown>): EnvironmentVariables {
