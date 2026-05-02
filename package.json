@@ -83,7 +83,8 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "/node_modules/(?!(@paralleldrive/cuid2|@noble/hashes|@noble/ciphers|jwks-rsa|jose))"
+      "/node_modules/.pnpm/(?!(@paralleldrive\\+cuid2|@noble\\+hashes|@noble\\+ciphers|jwks-rsa|jose))[^/]+/node_modules/(?!(@paralleldrive/cuid2|@noble/hashes|@noble/ciphers|jwks-rsa|jose))",
+      "/node_modules/(?!\\.pnpm|@paralleldrive/cuid2|@noble/hashes|@noble/ciphers|jwks-rsa|jose)"
     ],
     "collectCoverageFrom": [
       "**/*.(t|j)s"
