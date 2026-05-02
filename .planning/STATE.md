@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02.1-01-PLAN.md
-last_updated: "2026-05-02T18:26:29Z"
+stopped_at: Completed 02.1-03-PLAN.md
+last_updated: "2026-05-02T18:38:52.329Z"
 last_activity: 2026-05-02
 progress:
   total_phases: 11
   completed_phases: 3
-  total_plans: 10
-  completed_plans: 10
-  percent: 100
+  total_plans: 14
+  completed_plans: 13
+  percent: 93
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-18)
 ## Current Position
 
 Phase: 02.1 (Auth0 webhook endpoint)
-Plan: 1 of 4 complete
-Status: Executing — Wave 0 done, Wave 1 next (02.1-02 + 02.1-03 parallel)
+Plan: 2 of 4 complete
+Status: Ready to execute
 Last activity: 2026-05-02
 
-Progress: [██████████] 100%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [██████████] 100%
 
 *Updated after each plan completion*
 | Phase 02-auth-infrastructure P01 | 6min | 2 tasks | 12 files |
+| Phase 02.1 P03 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - Image strategy: external URLs only, no S3 pipeline in v1
 - Wave 0 RED stubs import non-existent source files at import level (not assertion level) to guarantee live test failure
 - Controller spec uses direct instantiation (no TestingModule); service spec uses TestingModule + getRepositoryToken
+- [Phase ?]: Length-mismatch early return before timingSafeEqual prevents TypeError (crypto throws if Buffer byte lengths differ)
+- [Phase ?]: Auth0WebhookDto uses only sub and event; ValidationPipe whitelist:true strips extra Auth0 fields silently
 
 ### Roadmap Evolution
 
@@ -96,6 +99,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-02T18:26:29Z
-Stopped at: Completed 02.1-01-PLAN.md (Wave 0 RED stubs)
-Resume file: .planning/phases/02.1-add-a-webhook-endpoint-for-auth0-to-add-or-refresh-user-on-c/02.1-02-PLAN.md
+Last session: 2026-05-02T18:38:52.287Z
+Stopped at: Completed 02.1-03-PLAN.md
+Resume file: None

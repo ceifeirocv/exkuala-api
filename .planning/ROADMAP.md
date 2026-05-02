@@ -87,12 +87,12 @@ Plans:
 **Goal:** Auth0 Actions can notify the API when a user registers or logs in; the API upserts a local User record keyed on auth0Id, secured by a shared-secret header guard
 **Requirements**: AUTH-03
 **Depends on:** Phase 2
-**Plans:** 4 plans in 3 waves
+**Plans:** 3/4 plans executed
 
 Plans:
-- [ ] 02.1-01-PLAN.md — Wave 0: Test stubs (webhook-secret.guard.spec.ts, users.service.spec.ts, webhooks.controller.spec.ts)
-- [ ] 02.1-02-PLAN.md — Wave 1: WEBHOOK_SECRET env var, UsersService.upsertFromAuth0(), UsersModule
-- [ ] 02.1-03-PLAN.md — Wave 1: WebhookSecretGuard (timingSafeEqual), Auth0WebhookDto (parallel to 02)
+- [x] 02.1-01-PLAN.md — Wave 0: Test stubs (webhook-secret.guard.spec.ts, users.service.spec.ts, webhooks.controller.spec.ts)
+- [x] 02.1-02-PLAN.md — Wave 1: WEBHOOK_SECRET env var, UsersService.upsertFromAuth0(), UsersModule
+- [x] 02.1-03-PLAN.md — Wave 1: WebhookSecretGuard (timingSafeEqual), Auth0WebhookDto (parallel to 02)
 - [ ] 02.1-04-PLAN.md — Wave 2: WebhookController, WebhooksModule, AppModule wiring
 
 ### Phase 3: Users
@@ -224,7 +224,7 @@ Plans:
 | 1. Foundation | 2/2 | Complete | 2026-04-18 |
 | 1.1. Migrate from prisma to typeorm *(INSERTED)* | 6/6 | Complete | 2026-04-19 |
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
-| 02.1. Auth0 webhook endpoint *(INSERTED)* | 0/4 | Not started | - |
+| 02.1. Auth0 webhook endpoint *(INSERTED)* | 3/4 | In Progress|  |
 | 3. Users | 0/1 | Not started | - |
 | 4. Categories | 0/2 | Not started | - |
 | 5. Organizers | 0/2 | Not started | - |
