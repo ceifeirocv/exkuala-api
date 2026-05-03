@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to discuss/plan
-stopped_at: Phase 02.1 context gathered
-last_updated: "2026-05-02T12:13:19.091Z"
-last_activity: 2026-04-29
+stopped_at: Phase 02.1 complete — all 4 plans verified
+last_updated: "2026-05-02T18:50:00.000Z"
+last_activity: 2026-05-02
 progress:
   total_phases: 11
-  completed_phases: 3
-  total_plans: 10
-  completed_plans: 10
+  completed_phases: 4
+  total_plans: 14
+  completed_plans: 14
   percent: 100
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 3 — Users (Phase 2 complete 2026-04-29)
+**Current focus:** Phase 3 — Users (Phase 02.1 complete 2026-05-02)
 
 ## Current Position
 
 Phase: 3 of 9 (Users)
 Plan: 0 of 1 in current phase
 Status: Ready to discuss/plan
-Last activity: 2026-04-29
+Last activity: 2026-05-02
 
-Progress: [██████████] 100%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [██████████] 100%
 
 *Updated after each plan completion*
 | Phase 02-auth-infrastructure P01 | 6min | 2 tasks | 12 files |
+| Phase 02.1 P03 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,10 @@ Recent decisions affecting current work:
 - Soft delete (`deletedAt`) goes on Event in Phase 1 migration — retrofitting later is costly
 - Cursor-based pagination built into first event listing endpoint
 - Image strategy: external URLs only, no S3 pipeline in v1
+- Wave 0 RED stubs import non-existent source files at import level (not assertion level) to guarantee live test failure
+- Controller spec uses direct instantiation (no TestingModule); service spec uses TestingModule + getRepositoryToken
+- [Phase ?]: Length-mismatch early return before timingSafeEqual prevents TypeError (crypto throws if Buffer byte lengths differ)
+- [Phase ?]: Auth0WebhookDto uses only sub and event; ValidationPipe whitelist:true strips extra Auth0 fields silently
 
 ### Roadmap Evolution
 
@@ -94,6 +99,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-02T12:13:19.044Z
-Stopped at: Phase 02.1 context gathered
-Resume file: .planning/phases/02.1-add-a-webhook-endpoint-for-auth0-to-add-or-refresh-user-on-c/02.1-CONTEXT.md
+Last session: 2026-05-02T18:38:52.287Z
+Stopped at: Completed 02.1-03-PLAN.md
+Resume file: None

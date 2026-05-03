@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
+import { IsNumber, IsString, Max, Min, MinLength, validateSync } from 'class-validator';
 
 export class EnvironmentVariables {
   @IsString()
@@ -21,6 +21,10 @@ export class EnvironmentVariables {
 
   @IsString()
   AUTH0_NAMESPACE!: string;
+
+  @IsString()
+  @MinLength(32)
+  WEBHOOK_SECRET!: string;
 }
 
 export function validate(config: Record<string, unknown>): EnvironmentVariables {
