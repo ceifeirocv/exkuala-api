@@ -103,10 +103,11 @@ Plans:
   1. First authenticated request for a new Auth0 identity creates a User row in the database
   2. Subsequent requests with the same Auth0 identity do not create duplicate rows (upsert semantics)
   3. The local User record is attached to the request context and available to downstream guards and services
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: User Prisma model, UsersService.upsertFromAuth0(), JwtStrategy validate() integration
+- [ ] 03-01-PLAN.md — Wave 0: Test stubs (findOrCreate tests in users.service.spec.ts, async validate tests in jwt.strategy.spec.ts)
+- [ ] 03-02-PLAN.md — Wave 1: AuthenticatedUser type, Express augmentation, UsersService.findOrCreate(), async JwtStrategy.validate(), AuthModule wiring, @CurrentUser() decorator
 
 ---
 
@@ -225,7 +226,7 @@ Plans:
 | 1.1. Migrate from prisma to typeorm *(INSERTED)* | 6/6 | Complete | 2026-04-19 |
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
-| 3. Users | 0/1 | Not started | - |
+| 3. Users | 0/2 | Not started | - |
 | 4. Categories | 0/2 | Not started | - |
 | 5. Organizers | 0/2 | Not started | - |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
