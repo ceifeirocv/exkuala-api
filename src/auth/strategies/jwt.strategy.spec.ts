@@ -1,4 +1,6 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../../../users/users.service';
 
 // Mock jwks-rsa before importing JwtStrategy — passportJwtSecret is only called
 // in the constructor's super() call; tests only exercise validate(), not JWKS fetching.
@@ -30,33 +32,74 @@ const mockConfig = (key: string): string => {
   return values[key] ?? '';
 };
 
+const mockUsersService = { findOrCreate: jest.fn() } as unknown as UsersService;
+
 describe('JwtStrategy', () => {
+  beforeEach(() => jest.clearAllMocks());
+
   describe('validate()', () => {
-    it('extracts sub and roles from a JWT payload using the configured namespace', () => {
+    it('extracts sub and roles from a JWT payload using the configured namespace', async () => {
       const config = { get: mockConfig } as unknown as ConfigService;
-      const strategy = new JwtStrategy(config);
+      const strategy = new JwtStrategy(config, mockUsersService);
       const payload = {
         sub: 'auth0|abc123',
         'https://exkuala.cv/roles': ['admin'],
       };
-      const result = strategy.validate(payload);
+      const result = await strategy.validate(payload);
       expect(result).toEqual({ sub: 'auth0|abc123', roles: ['admin'] });
     });
 
-    it('returns empty roles array when namespace claim is absent', () => {
+    it('returns empty roles array when namespace claim is absent', async () => {
       const config = { get: mockConfig } as unknown as ConfigService;
-      const strategy = new JwtStrategy(config);
+      const strategy = new JwtStrategy(config, mockUsersService);
       const payload = { sub: 'auth0|abc123' };
-      const result = strategy.validate(payload);
+      const result = await strategy.validate(payload);
       expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
     });
 
-    it('returns empty roles when namespace claim is explicitly undefined', () => {
+    it('returns empty roles when namespace claim is explicitly undefined', async () => {
       const config = { get: mockConfig } as unknown as ConfigService;
-      const strategy = new JwtStrategy(config);
+      const strategy = new JwtStrategy(config, mockUsersService);
       const payload = { sub: 'auth0|abc123', 'https://exkuala.cv/roles': undefined };
-      const result = strategy.validate(payload);
+      const result = await strategy.validate(payload);
       expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
+    });
+  });
+
+  describe('async validate()', () => {
+    it('returns AuthenticatedUser when findOrCreate resolves', async () => {
+      const config = { get: mockConfig } as unknown as ConfigService;
+      const strategy = new JwtStrategy(config, mockUsersService);
+      (mockUsersService.findOrCreate as jest.Mock).mockResolvedValueOnce({
+        id: 'user1',
+        auth0Id: 'auth0|abc123',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+      });
+
+      const result = await strategy.validate({
+        sub: 'auth0|abc123',
+        'https://exkuala.cv/roles': ['admin'],
+      });
+
+      expect(result).toEqual({
+        id: 'user1',
+        auth0Id: 'auth0|abc123',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        roles: ['admin'],
+      });
+      expect(mockUsersService.findOrCreate).toHaveBeenCalledWith('auth0|abc123');
+    });
+
+    it('throws UnauthorizedException when findOrCreate rejects', async () => {
+      const config = { get: mockConfig } as unknown as ConfigService;
+      const strategy = new JwtStrategy(config, mockUsersService);
+      (mockUsersService.findOrCreate as jest.Mock).mockRejectedValueOnce(new Error('db error'));
+
+      await expect(
+        strategy.validate({ sub: 'auth0|abc123' }),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 });
