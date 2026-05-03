@@ -30,4 +30,14 @@ export class UsersService {
       throw err;
     }
   }
+
+  // Finds an existing user by auth0Id; if absent, upserts then re-fetches.
+  // Hot path: the findOne branch is taken on every request after first login.
+  // Does not catch errors — caller (JwtStrategy.validate) handles and converts to UnauthorizedException.
+  async findOrCreate(sub: string): Promise<UserEntity> {
+    const existing = await this.userRepository.findOne({ where: { auth0Id: sub } });
+    if (existing) return existing;
+    await this.upsertFromAuth0(sub);
+    return this.userRepository.findOneOrFail({ where: { auth0Id: sub } });
+  }
 }
