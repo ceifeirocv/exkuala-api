@@ -14,7 +14,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 - [x] **Phase 1: Foundation** - Prisma, ConfigModule, global pipes, Swagger, URI versioning *(complete 2026-04-18)*
 - [x] **Phase 1.1: Migrate from prisma to typeorm** *(complete 2026-04-19)*
 - [x] **Phase 2: Auth Infrastructure** - JWT guard chain, JWKS validation, role enforcement, public bypass (completed 2026-04-29)
-- [ ] **Phase 3: Users** - Local user record, auth0Id upsert on first authenticated request
+- [x] **Phase 3: Users** - Local user record, auth0Id upsert on first authenticated request *(complete 2026-05-03)*
 - [ ] **Phase 4: Categories** - Managed category list with admin CRUD and i18n translations
 - [ ] **Phase 5: Organizers** - Application flow, admin approval/rejection, public organizer profile
 - [ ] **Phase 6: Organizer Event CRUD** - Event create/edit/delete, ownership enforcement, status lifecycle, soft delete
