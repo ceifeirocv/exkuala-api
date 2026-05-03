@@ -1,7 +1,7 @@
 {
   "git": {
     "quick_branch_template": null,
-    "branching_strategy": "phase"
+    "branching_strategy": "none"
   },
   "hooks": {
     "context_warnings": true,
@@ -51,8 +51,5 @@
   },
   "graphify": {
     "enabled": true
-  },
-  "firecrawl": "fc-e9efb3f0863d47ae8c81e1ec92d4db3b",
-  "exa_search": "2c0d48af-521a-4e2e-9eeb-f9ebf7605adc",
-  "search_gitignored": false
+  }
 }
