@@ -1,4 +1,4 @@
-import { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WebhookSecretGuard } from './webhook-secret.guard';
 
@@ -29,17 +29,18 @@ describe('WebhookSecretGuard', () => {
     expect(guard.canActivate(mockContext('my-secret'))).toBe(true);
   });
 
-  it('returns false when header differs from secret', () => {
-    expect(guard.canActivate(mockContext('wrong-secret'))).toBe(false);
+  it('throws UnauthorizedException when header differs from secret', () => {
+    expect(() => guard.canActivate(mockContext('wrong-secret'))).toThrow(UnauthorizedException);
   });
 
-  it('returns false without throwing when lengths differ', () => {
-    // Key: must not throw TypeError from timingSafeEqual when buffer lengths differ
-    expect(() => guard.canActivate(mockContext('x'))).not.toThrow();
-    expect(guard.canActivate(mockContext('x'))).toBe(false);
+  it('throws UnauthorizedException (not TypeError) when lengths differ', () => {
+    // Buffer padding (not early-return) prevents TypeError from timingSafeEqual.
+    // The guard must throw UnauthorizedException, never a raw TypeError.
+    expect(() => guard.canActivate(mockContext('x'))).toThrow(UnauthorizedException);
+    expect(() => guard.canActivate(mockContext('x'))).not.toThrow(TypeError);
   });
 
-  it('returns false when header is absent', () => {
-    expect(guard.canActivate(mockContext(undefined))).toBe(false);
+  it('throws UnauthorizedException when header is absent', () => {
+    expect(() => guard.canActivate(mockContext(undefined))).toThrow(UnauthorizedException);
   });
 });

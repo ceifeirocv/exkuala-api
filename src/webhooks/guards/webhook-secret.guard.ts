@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { timingSafeEqual } from 'crypto';
 import type { Request } from 'express';
@@ -12,25 +17,28 @@ export class WebhookSecretGuard implements CanActivate {
     const incomingSecret = req.headers['x-webhook-secret'];
     const expectedSecret = this.config.get<string>('WEBHOOK_SECRET');
 
-    // Reject immediately if either value is missing, not a string, or empty.
+    // Reject non-string or empty values before any comparison.
     if (
       typeof incomingSecret !== 'string' ||
       typeof expectedSecret !== 'string' ||
       incomingSecret.length === 0 ||
       expectedSecret.length === 0
     ) {
-      return false;
+      throw new UnauthorizedException('Invalid or missing webhook secret');
     }
 
-    // timingSafeEqual throws TypeError if byte lengths differ (RESEARCH.md Pitfall 2).
-    // Return false before calling it — never throw 500 on a missing-secret request.
-    if (incomingSecret.length !== expectedSecret.length) {
-      return false;
+    // Pad both buffers to maxLen so timingSafeEqual always receives equal-length inputs.
+    // An early-return on length mismatch leaks secret length via timing oracle (CR-01).
+    const maxLen = Math.max(incomingSecret.length, expectedSecret.length);
+    const a = Buffer.alloc(maxLen);
+    const b = Buffer.alloc(maxLen);
+    Buffer.from(incomingSecret).copy(a);
+    Buffer.from(expectedSecret).copy(b);
+
+    if (!timingSafeEqual(a, b)) {
+      throw new UnauthorizedException('Invalid or missing webhook secret');
     }
 
-    return timingSafeEqual(
-      Buffer.from(incomingSecret),
-      Buffer.from(expectedSecret),
-    );
+    return true;
   }
 }

@@ -1,4 +1,4 @@
-import { IsIn, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
 // DTO for Auth0 Action webhook body.
 // Auth0 Action sends: { sub: "auth0|<user_id>", event: "post-login" | "post-register" }
@@ -6,6 +6,7 @@ import { IsIn, IsString } from 'class-validator';
 export class Auth0WebhookDto {
   // sub is the Auth0 user_id (event.user.user_id from Auth0 Action)
   @IsString()
+  @IsNotEmpty()
   sub: string;
 
   // event distinguishes first-time registration from subsequent logins

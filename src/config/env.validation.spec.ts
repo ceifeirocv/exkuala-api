@@ -10,7 +10,7 @@ describe('validate (env)', () => {
       AUTH0_AUDIENCE: 'https://api.example.com',
       AUTH0_ISSUER: 'https://example.auth0.com/',
       AUTH0_NAMESPACE: 'https://example.com',
-      WEBHOOK_SECRET: 'secret',
+      WEBHOOK_SECRET: 'a-webhook-secret-that-is-at-least-32-chars',
     });
     expect(result).toBeInstanceOf(EnvironmentVariables);
     expect(result.DATABASE_URL).toBe('postgresql://localhost/test');
@@ -53,7 +53,7 @@ describe('validate (env)', () => {
       AUTH0_AUDIENCE: 'https://api.example.com',
       AUTH0_ISSUER: 'https://example.auth0.com/',
       AUTH0_NAMESPACE: 'https://example.com',
-      WEBHOOK_SECRET: 'secret',
+      WEBHOOK_SECRET: 'a-webhook-secret-that-is-at-least-32-chars',
       SOMETHING_ELSE: 'ignored',
     });
     expect(result.DATABASE_URL).toBe('postgresql://localhost/test');
