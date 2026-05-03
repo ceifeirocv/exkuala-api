@@ -106,7 +106,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Wave 0: Test stubs (findOrCreate tests in users.service.spec.ts, async validate tests in jwt.strategy.spec.ts)
+- [x] 03-01-PLAN.md — Wave 0: Test stubs (findOrCreate tests in users.service.spec.ts, async validate tests in jwt.strategy.spec.ts)
 - [ ] 03-02-PLAN.md — Wave 1: AuthenticatedUser type, Express augmentation, UsersService.findOrCreate(), async JwtStrategy.validate(), AuthModule wiring, @CurrentUser() decorator
 
 ---
@@ -226,7 +226,7 @@ Plans:
 | 1.1. Migrate from prisma to typeorm *(INSERTED)* | 6/6 | Complete | 2026-04-19 |
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
-| 3. Users | 0/2 | Not started | - |
+| 3. Users | 1/2 | In Progress|  |
 | 4. Categories | 0/2 | Not started | - |
 | 5. Organizers | 0/2 | Not started | - |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
