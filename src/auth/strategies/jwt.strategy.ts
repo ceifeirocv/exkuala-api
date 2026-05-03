@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
+import { UsersService } from '../../users/users.service';
+import { AuthenticatedUser } from '../../types/auth';
 
 interface JwtPayload {
   sub: string;
@@ -11,7 +13,10 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly config: ConfigService) {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     // Use `config` parameter directly in super() — this.config is unbound here (Pitfall 1)
     super({
       secretOrKeyProvider: passportJwtSecret({
@@ -27,12 +32,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtPayload): { sub: string; roles: string[] } {
+  async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
     // Namespace is read at request time via this.config — safe after super() (Pitfall 1 does not apply here)
     const namespace = this.config.get<string>('AUTH0_NAMESPACE')!;
-    return {
-      sub: payload.sub,
-      roles: (payload[namespace] as string[]) ?? [],
-    };
+    const roles = (payload[namespace] as string[]) ?? [];
+    try {
+      const user = await this.usersService.findOrCreate(payload.sub);
+      return { ...user, roles };
+    } catch {
+      // Any DB error becomes 401 — belt-and-suspenders; webhook path should have created the user.
+      throw new UnauthorizedException();
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '../../../users/users.service';
+import { UsersService } from '../../users/users.service';
 
 // Mock jwks-rsa before importing JwtStrategy — passportJwtSecret is only called
 // in the constructor's super() call; tests only exercise validate(), not JWKS fetching.
@@ -38,6 +38,17 @@ describe('JwtStrategy', () => {
   beforeEach(() => jest.clearAllMocks());
 
   describe('validate()', () => {
+    const stubEntity = {
+      id: 'stub',
+      auth0Id: 'auth0|abc123',
+      createdAt: new Date('2024-01-01'),
+      updatedAt: new Date('2024-01-01'),
+    };
+
+    beforeEach(() => {
+      (mockUsersService.findOrCreate as jest.Mock).mockResolvedValue(stubEntity);
+    });
+
     it('extracts sub and roles from a JWT payload using the configured namespace', async () => {
       const config = { get: mockConfig } as unknown as ConfigService;
       const strategy = new JwtStrategy(config, mockUsersService);
@@ -46,7 +57,7 @@ describe('JwtStrategy', () => {
         'https://exkuala.cv/roles': ['admin'],
       };
       const result = await strategy.validate(payload);
-      expect(result).toEqual({ sub: 'auth0|abc123', roles: ['admin'] });
+      expect(result).toEqual({ id: 'stub', auth0Id: 'auth0|abc123', createdAt: new Date('2024-01-01'), updatedAt: new Date('2024-01-01'), roles: ['admin'] });
     });
 
     it('returns empty roles array when namespace claim is absent', async () => {
@@ -54,7 +65,7 @@ describe('JwtStrategy', () => {
       const strategy = new JwtStrategy(config, mockUsersService);
       const payload = { sub: 'auth0|abc123' };
       const result = await strategy.validate(payload);
-      expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
+      expect(result).toEqual({ id: 'stub', auth0Id: 'auth0|abc123', createdAt: new Date('2024-01-01'), updatedAt: new Date('2024-01-01'), roles: [] });
     });
 
     it('returns empty roles when namespace claim is explicitly undefined', async () => {
@@ -62,7 +73,7 @@ describe('JwtStrategy', () => {
       const strategy = new JwtStrategy(config, mockUsersService);
       const payload = { sub: 'auth0|abc123', 'https://exkuala.cv/roles': undefined };
       const result = await strategy.validate(payload);
-      expect(result).toEqual({ sub: 'auth0|abc123', roles: [] });
+      expect(result).toEqual({ id: 'stub', auth0Id: 'auth0|abc123', createdAt: new Date('2024-01-01'), updatedAt: new Date('2024-01-01'), roles: [] });
     });
   });
 

@@ -5,9 +5,10 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [PassportModule],
+  imports: [PassportModule, UsersModule],
   providers: [
     JwtStrategy,
     JwtAuthGuard,
