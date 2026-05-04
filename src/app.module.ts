@@ -8,6 +8,9 @@ import { validate } from './config/env.validation';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { EventEntity } from './events/event.entity';
 import { UserEntity } from './users/user.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { CategoryEntity } from './categories/category.entity';
+import { CategoryTranslationEntity } from './categories/category-translation.entity';
 
 @Module({
   imports: [
@@ -20,7 +23,7 @@ import { UserEntity } from './users/user.entity';
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
         url: cfg.get<string>('DATABASE_URL'),
-        entities: [UserEntity, EventEntity],
+        entities: [UserEntity, EventEntity, CategoryEntity, CategoryTranslationEntity],
         migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
         // IMPORTANT: synchronize only in development — NEVER in production (D-04)
         // synchronize: true auto-applies schema changes without running migration files.
@@ -32,6 +35,7 @@ import { UserEntity } from './users/user.entity';
     }),
     AuthModule,
     WebhooksModule,   // registers /api/v1/webhooks/auth0 endpoint
+    CategoriesModule, // registers /api/v1/categories endpoints
   ],
   controllers: [AppController],
   providers: [AppService],
