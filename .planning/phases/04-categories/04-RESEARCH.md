@@ -513,21 +513,21 @@ public async up(queryRunner: QueryRunner): Promise<void> {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **PATCH with slug: 400 or silent ignore?**
    - What we know: D-02 says slug is write-once; planner decides 400 vs. silent ignore.
    - What's unclear: 400 is more explicit and helps API consumers detect bugs; silent ignore is simpler.
-   - Recommendation: Return 400 `BadRequestException('slug is immutable after creation')` — explicit feedback is better API ergonomics than silent data loss.
+   - RESOLVED: Return 400 `BadRequestException('slug is immutable after creation')` — explicit feedback is better API ergonomics than silent data loss. Implemented in plan 04-04 Task 2.
 
 2. **GET /categories/:slug single-category endpoint?**
    - What we know: Not in roadmap but flagged as planner's discretion in CONTEXT.md.
    - What's unclear: Whether downstream consumers (Phase 6+ event creation) will need it.
-   - Recommendation: Omit for now — Phase 6 can look up by slug at that time. Add if needed.
+   - RESOLVED: Omit — Phase 6 can look up by slug at that time. Not included in plans.
 
 3. **Seeder script name?**
    - What we know: D-15 suggests `pnpm seed:categories`.
-   - Recommendation: Use `seed:categories` in `package.json` scripts, pointing to `ts-node -r tsconfig-paths/register src/database/seeds/categories.seed.ts`.
+   - RESOLVED: Use `seed:categories` in `package.json` scripts, pointing to `ts-node -r tsconfig-paths/register src/database/seeds/categories.seed.ts`. Implemented in plan 04-03 Task 2.
 
 ---
 
