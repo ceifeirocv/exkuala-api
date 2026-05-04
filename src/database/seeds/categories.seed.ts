@@ -39,12 +39,13 @@ async function seed(): Promise<void> {
   const transRepo = AppDataSource.getRepository(CategoryTranslationEntity);
 
   for (const data of SEED_CATEGORIES) {
-    // Upsert on slug — idempotent on re-run (RESEARCH.md Pitfall 4)
-    await catRepo.upsert(
-      { id: createId(), name: data.name, slug: data.slug },
-      { conflictPaths: ['slug'] },
-    );
-    const saved = await catRepo.findOneOrFail({ where: { slug: data.slug } });
+    // Find-or-insert for categories: upsert updating id breaks FK on category_translations.
+    // Insert only if slug does not already exist — idempotent on re-run.
+    let saved = await catRepo.findOne({ where: { slug: data.slug } });
+    if (!saved) {
+      saved = catRepo.create({ id: createId(), name: data.name, slug: data.slug });
+      await catRepo.save(saved);
+    }
 
     for (const t of data.translations) {
       // Upsert on (categoryId, locale) — idempotent on re-run

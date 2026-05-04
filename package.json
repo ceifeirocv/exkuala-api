@@ -21,7 +21,7 @@
     "migration:generate": "pnpm run build && npx typeorm migration:generate src/database/migrations/migration -d dist/database/data-source.js",
     "migration:run": "pnpm run build && npx typeorm migration:run -d dist/database/data-source.js",
     "migration:revert": "pnpm run build && npx typeorm migration:revert -d dist/database/data-source.js",
-    "seed:categories": "pnpm run build && ts-node -r tsconfig-paths/register src/database/seeds/categories.seed.ts"
+    "seed:categories": "pnpm run build && node dist/database/seeds/categories.seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
