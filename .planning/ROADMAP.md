@@ -116,15 +116,18 @@ Plans:
 **Depends on**: Phase 1
 **Requirements**: CAT-01, CAT-02, CAT-03, I18N-02
 **Success Criteria** (what must be TRUE):
-  1. `GET /api/v1/categories` returns the full category list with name and slug
+  1. `GET /api/v1/categories` returns the full category list with default name, slug, and translations map `{ locale: name }`
   2. Admin can create, edit, and delete a category via authenticated endpoints
-  3. `GET /api/v1/categories` with `Accept-Language: pt` returns category names in Portuguese where a translation exists, falling back to the default name otherwise
-  4. Category slugs are unique and URL-safe
-**Plans**: TBD
+  3. `GET /api/v1/categories` always returns full translations map per category; clients resolve their preferred locale (D-12: supersedes Accept-Language server-side resolution)
+  4. Category slugs are unique, URL-safe, and write-once after creation
+**Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 04-01: Category and CategoryTranslation Prisma models, seed data, CategoriesModule CRUD
-- [ ] 04-02: Translation-aware GET endpoint (Accept-Language header resolution for categories)
+- [ ] 04-01-PLAN.md — Wave 0: TDD RED stubs (categories.service.spec.ts, categories.controller.spec.ts)
+- [ ] 04-02-PLAN.md — Wave 1: CategoryEntity, CategoryTranslationEntity, DTOs (create, update, response interface)
+- [ ] 04-03-PLAN.md — Wave 1: TypeORM migration (categories + category_translations tables), seeder script, package.json seed:categories script
+- [ ] 04-04-PLAN.md — Wave 2: CategoriesService (CRUD + slug derivation + translations map), CategoriesController, CategoriesModule, AppModule wiring, slugify install
+- [ ] 04-05-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + pnpm seed:categories + full test suite + human verification
 
 ---
 
@@ -227,7 +230,7 @@ Plans:
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
 | 3. Users | 1/2 | In Progress|  |
-| 4. Categories | 0/2 | Not started | - |
+| 4. Categories | 0/5 | Not started | - |
 | 5. Organizers | 0/2 | Not started | - |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
 | 7. Public Event Discovery | 0/3 | Not started | - |
