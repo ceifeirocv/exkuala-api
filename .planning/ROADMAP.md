@@ -123,9 +123,9 @@ Plans:
 **Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 04-01-PLAN.md — Wave 0: TDD RED stubs (categories.service.spec.ts, categories.controller.spec.ts)
-- [ ] 04-02-PLAN.md — Wave 1: CategoryEntity, CategoryTranslationEntity, DTOs (create, update, response interface)
-- [ ] 04-03-PLAN.md — Wave 1: TypeORM migration (categories + category_translations tables), seeder script, package.json seed:categories script
+- [x] 04-01-PLAN.md — Wave 0: TDD RED stubs (categories.service.spec.ts, categories.controller.spec.ts)
+- [x] 04-02-PLAN.md — Wave 1: CategoryEntity, CategoryTranslationEntity, DTOs (create, update, response interface)
+- [x] 04-03-PLAN.md — Wave 1: TypeORM migration (categories + category_translations tables), seeder script, package.json seed:categories script
 - [ ] 04-04-PLAN.md — Wave 2: CategoriesService (CRUD + slug derivation + translations map), CategoriesController, CategoriesModule, AppModule wiring, slugify install
 - [ ] 04-05-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + pnpm seed:categories + full test suite + human verification
 

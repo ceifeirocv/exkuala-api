@@ -35,9 +35,9 @@
 
 ### Categories (CAT)
 
-- [ ] **CAT-01**: Categories exist as a managed list (name + slug)
+- [x] **CAT-01**: Categories exist as a managed list (name + slug)
 - [ ] **CAT-02**: Admin can create, edit, and delete categories
-- [ ] **CAT-03**: Category names support translations via a separate translations table
+- [x] **CAT-03**: Category names support translations via a separate translations table
 
 ### RSVP (RSVP)
 
@@ -60,7 +60,7 @@
 ### Internationalization (I18N)
 
 - [ ] **I18N-01**: Event title and description support translations via a separate `event_translations` table (locale, title, description)
-- [ ] **I18N-02**: Category names support translations via a separate `category_translations` table (locale, name)
+- [x] **I18N-02**: Category names support translations via a separate `category_translations` table (locale, name)
 - [ ] **I18N-03**: API returns translated content when a valid `Accept-Language` header is provided; falls back to default content if translation is not available
 
 ---
@@ -111,9 +111,9 @@
 | DISC-02 | Phase 7 — Public Event Discovery | Pending |
 | DISC-03 | Phase 7 — Public Event Discovery | Pending |
 | DISC-04 | Phase 7 — Public Event Discovery | Pending |
-| CAT-01 | Phase 4 — Categories | Pending |
+| CAT-01 | Phase 4 — Categories | Complete |
 | CAT-02 | Phase 4 — Categories | Pending |
-| CAT-03 | Phase 4 — Categories | Pending |
+| CAT-03 | Phase 4 — Categories | Complete |
 | RSVP-01 | Phase 8 — RSVP | Pending |
 | RSVP-02 | Phase 8 — RSVP | Pending |
 | RSVP-03 | Phase 8 — RSVP | Pending |
@@ -123,7 +123,7 @@
 | ADMIN-03 | Phase 9 — Admin Moderation | Pending |
 | ADMIN-04 | Phase 9 — Admin Moderation | Pending |
 | I18N-01 | Phase 7 — Public Event Discovery | Pending |
-| I18N-02 | Phase 4 — Categories | Pending |
+| I18N-02 | Phase 4 — Categories | Complete |
 | I18N-03 | Phase 7 — Public Event Discovery | Pending |
 | SEC-01 | Phase 1 — Foundation | Complete |
 
