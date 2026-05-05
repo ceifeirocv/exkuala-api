@@ -15,7 +15,7 @@ This roadmap delivers the Cultural Agenda API in dependency-driven order: founda
 - [x] **Phase 1.1: Migrate from prisma to typeorm** *(complete 2026-04-19)*
 - [x] **Phase 2: Auth Infrastructure** - JWT guard chain, JWKS validation, role enforcement, public bypass (completed 2026-04-29)
 - [x] **Phase 3: Users** - Local user record, auth0Id upsert on first authenticated request *(complete 2026-05-03)*
-- [ ] **Phase 4: Categories** - Managed category list with admin CRUD and i18n translations
+- [x] **Phase 4: Categories** - Managed category list with admin CRUD and i18n translations *(complete 2026-05-05)*
 - [ ] **Phase 5: Organizers** - Application flow, admin approval/rejection, public organizer profile
 - [ ] **Phase 6: Organizer Event CRUD** - Event create/edit/delete, ownership enforcement, status lifecycle, soft delete
 - [ ] **Phase 7: Public Event Discovery** - Public listing with filtering, pagination, full-text search, i18n content delivery
@@ -126,8 +126,8 @@ Plans:
 - [x] 04-01-PLAN.md — Wave 0: TDD RED stubs (categories.service.spec.ts, categories.controller.spec.ts)
 - [x] 04-02-PLAN.md — Wave 1: CategoryEntity, CategoryTranslationEntity, DTOs (create, update, response interface)
 - [x] 04-03-PLAN.md — Wave 1: TypeORM migration (categories + category_translations tables), seeder script, package.json seed:categories script
-- [ ] 04-04-PLAN.md — Wave 2: CategoriesService (CRUD + slug derivation + translations map), CategoriesController, CategoriesModule, AppModule wiring, slugify install
-- [ ] 04-05-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + pnpm seed:categories + full test suite + human verification
+- [x] 04-04-PLAN.md — Wave 2: CategoriesService (CRUD + slug derivation + translations map), CategoriesController, CategoriesModule, AppModule wiring, slugify install
+- [x] 04-05-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + pnpm seed:categories + full test suite + human verification
 
 ---
 
@@ -230,7 +230,7 @@ Plans:
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
 | 3. Users | 1/2 | In Progress|  |
-| 4. Categories | 0/5 | Not started | - |
+| 4. Categories | 5/5 | Complete | 2026-05-05 |
 | 5. Organizers | 0/2 | Not started | - |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
 | 7. Public Event Discovery | 0/3 | Not started | - |
@@ -262,9 +262,9 @@ Plans:
 | DISC-02 | Phase 7 | Pending |
 | DISC-03 | Phase 7 | Pending |
 | DISC-04 | Phase 7 | Pending |
-| CAT-01 | Phase 4 | Pending |
-| CAT-02 | Phase 4 | Pending |
-| CAT-03 | Phase 4 | Pending |
+| CAT-01 | Phase 4 | Complete |
+| CAT-02 | Phase 4 | Complete |
+| CAT-03 | Phase 4 | Complete |
 | RSVP-01 | Phase 8 | Pending |
 | RSVP-02 | Phase 8 | Pending |
 | RSVP-03 | Phase 8 | Pending |
@@ -274,7 +274,7 @@ Plans:
 | ADMIN-03 | Phase 9 | Pending |
 | ADMIN-04 | Phase 9 | Pending |
 | I18N-01 | Phase 7 | Pending |
-| I18N-02 | Phase 4 | Pending |
+| I18N-02 | Phase 4 | Complete |
 | I18N-03 | Phase 7 | Pending |
 
 **Total: 33 requirements mapped across 9 phases. 100% coverage.**

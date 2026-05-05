@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Phase 4 context gathered
-last_updated: "2026-05-04T19:23:17.687Z"
-last_activity: 2026-05-04
+stopped_at: Phase 4 complete — human checkpoint approved
+last_updated: "2026-05-05T00:00:00.000Z"
+last_activity: 2026-05-05
 progress:
   total_phases: 11
   completed_phases: 5
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 4 — Categories (Phase 03 complete 2026-05-03)
+**Current focus:** Phase 5 — Organizers (Phase 04 complete 2026-05-05)
 
 ## Current Position
 
-Phase: 3 of 9 (Users)
-Plan: 1 of 1 in current phase
-Status: Phase complete — ready for verification
-Last activity: 2026-05-04
+Phase: 4 of 9 (Categories)
+Plan: 5 of 5 in current phase
+Status: Phase complete — human checkpoint approved 2026-05-05
+Last activity: 2026-05-05
 
 Progress: [█████████░] 90%
 
@@ -75,6 +75,8 @@ Recent decisions affecting current work:
 - [Phase ?]: Auth0WebhookDto uses only sub and event; ValidationPipe whitelist:true strips extra Auth0 fields silently
 - [Phase ?]: Wave 0 TDD RED gate pattern
 - [Phase ?]: They go RED in Wave 1 when implementation changes — two-wave TDD contract
+- [Phase 04-05]: Seeder scripts must use node dist/...seed.js (not ts-node) when AppDataSource.entities uses dist/** glob — ts-node loads source entity classes unregistered in the dist-based metadata registry
+- [Phase 04-05]: Use find-or-insert (not upsert) for idempotent seeds where the row PK is referenced by a FK in a child table — upsert updating id breaks FK constraints on re-run
 
 ### Roadmap Evolution
 
@@ -102,6 +104,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-04T19:23:17.645Z
-Stopped at: Phase 4 context gathered
+Last session: 2026-05-05T00:00:00.000Z
+Stopped at: Phase 4 complete — ready for Phase 5 (Organizers)
 Resume file: None
