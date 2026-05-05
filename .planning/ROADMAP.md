@@ -114,7 +114,7 @@ Plans:
 ### Phase 4: Categories
 **Goal**: Categories exist as a managed, translatable reference list; admins control the list; events and clients can reference categories by slug
 **Depends on**: Phase 1
-**Requirements**: CAT-01, CAT-02, CAT-03, I18N-02
+**Requirements**: CAT-01, CAT-02, CAT-03, I18N-02, DOC-01
 **Success Criteria** (what must be TRUE):
   1. `GET /api/v1/categories` returns the full category list with default name, slug, and translations map `{ locale: name }`
   2. Admin can create, edit, and delete a category via authenticated endpoints
@@ -265,6 +265,7 @@ Plans:
 | CAT-01 | Phase 4 | Complete |
 | CAT-02 | Phase 4 | Complete |
 | CAT-03 | Phase 4 | Complete |
+| DOC-01 | Phase 4 | Complete |
 | RSVP-01 | Phase 8 | Pending |
 | RSVP-02 | Phase 8 | Pending |
 | RSVP-03 | Phase 8 | Pending |
@@ -277,7 +278,7 @@ Plans:
 | I18N-02 | Phase 4 | Complete |
 | I18N-03 | Phase 7 | Pending |
 
-**Total: 33 requirements mapped across 9 phases. 100% coverage.**
+**Total: 34 requirements mapped across 9 phases. 100% coverage.**
 
 ---
 *Created: 2026-04-18*

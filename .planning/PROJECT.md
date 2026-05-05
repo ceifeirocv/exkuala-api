@@ -58,6 +58,9 @@ A REST API powering a Cultural Agenda platform that helps people discover local 
 - [ ] Admin can approve/reject organizer applications
 - [ ] Admin can moderate (unpublish/remove) events
 
+**Documentation**
+- [ ] DOC-01: Swagger UI at `/api/docs` shows request/response examples and accepts Bearer token for protected routes
+
 ### Out of Scope (v1)
 
 - Ticketing / payment processing — users link to external ticket platform

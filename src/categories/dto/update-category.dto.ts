@@ -1,6 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class UpdateCategoryDto {
+  @ApiProperty({ example: 'Rock Music', required: false, maxLength: 100 })
   @IsOptional()
   @IsString()
   @MaxLength(100)
