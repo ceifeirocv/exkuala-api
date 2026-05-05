@@ -141,11 +141,14 @@ Plans:
   3. `GET /api/v1/organizers/:id` returns the public profile (name, bio, contact) for an approved organizer
   4. Rejected or pending organizers do not appear in public profile endpoints
   5. State transitions are enforced — an already-approved organizer cannot be re-submitted as pending
-**Plans**: TBD
+**Plans**: 5 plans in 4 waves
 
 Plans:
-- [ ] 05-01: Organizer Prisma model (status state machine: pending/approved/rejected), OrganizersModule, application endpoint
-- [ ] 05-02: Admin approval/rejection endpoints, public profile endpoint, state transition enforcement
+- [ ] 05-01-PLAN.md — Wave 0: TDD RED stubs (organizers.service.spec.ts, organizers.controller.spec.ts, admin-organizers.controller.spec.ts)
+- [ ] 05-02-PLAN.md — Wave 1: OrganizerEntity, OrganizerAuditLogEntity, DTOs, TypeORM migration
+- [ ] 05-03-PLAN.md — Wave 2: OrganizersService (state machine, apply/approve/reject, audit log), OrganizerGuard, @CurrentOrganizer() decorator
+- [ ] 05-04-PLAN.md — Wave 3: OrganizersController, AdminOrganizersController, OrganizersModule, AppModule wiring
+- [ ] 05-05-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
 
 ---
 
@@ -231,7 +234,7 @@ Plans:
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
 | 3. Users | 1/2 | In Progress|  |
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
-| 5. Organizers | 0/2 | Not started | - |
+| 5. Organizers | 0/5 | Not started | - |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
 | 7. Public Event Discovery | 0/3 | Not started | - |
 | 8. RSVP | 0/2 | Not started | - |
