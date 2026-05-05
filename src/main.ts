@@ -48,6 +48,6 @@ async function bootstrap() {
   // TypeORM connection pool will be properly closed on graceful shutdown.
   app.enableShutdownHooks();
 
-  await app.listen(process.env.PORT ?? 8080);
+  await app.listen(process.env.PORT ?? 8080, '0.0.0.0');
 }
 bootstrap();
