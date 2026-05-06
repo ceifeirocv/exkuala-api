@@ -3,8 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { Roles } from '../auth/decorators/roles.decorator';
 import { OrganizersService } from './organizers.service';
 import { OrganizerAuditLogEntity } from './organizer-audit-log.entity';
-import { OrganizerStatus } from './organizer.entity';
-import { OrganizerPublicResponseDto } from './dto/organizer-public-response.dto';
+import { OrganizerEntity, OrganizerStatus } from './organizer.entity';
 import { ApproveOrganizerDto } from './dto/approve-organizer.dto';
 import { RejectOrganizerDto } from './dto/reject-organizer.dto';
 
@@ -19,15 +18,15 @@ export class AdminOrganizersController {
   @Roles('admin')
   @Get()
   @ApiOperation({ summary: 'List organizers, optionally filtered by status (admin only)' })
-  @ApiResponse({ status: 200, description: 'Organizer list. Returns all statuses when status param is omitted.' })
-  findAll(@Query() query: { status?: OrganizerStatus }): Promise<OrganizerPublicResponseDto[]> {
+  @ApiResponse({ status: 200, type: OrganizerEntity, isArray: true, description: 'Organizer list with status. Returns all statuses when status param is omitted.' })
+  findAll(@Query() query: { status?: OrganizerStatus }): Promise<OrganizerEntity[]> {
     return this.organizersService.findByStatus(query.status);
   }
 
   @Roles('admin')
   @Get(':id/history')
   @ApiOperation({ summary: 'Get full audit log for an organizer (admin only)' })
-  @ApiResponse({ status: 200, description: 'Audit log entries, newest first.' })
+  @ApiResponse({ status: 200, type: OrganizerAuditLogEntity, isArray: true, description: 'Audit log entries, newest first.' })
   findHistory(@Param('id') id: string): Promise<OrganizerAuditLogEntity[]> {
     return this.organizersService.findAuditHistory(id);
   }

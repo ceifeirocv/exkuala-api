@@ -8,6 +8,8 @@ const mockOrganizersService = {
   apply: jest.fn(),
   findSelfWithLatestNote: jest.fn(),
   findApprovedById: jest.fn(),
+  // toPublicResponse called by controller after findApprovedById — identity mock passes spec data through
+  toPublicResponse: jest.fn((org) => org),
 };
 
 describe('OrganizersController', () => {

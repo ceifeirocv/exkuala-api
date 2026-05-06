@@ -141,12 +141,12 @@ export class OrganizersService {
   }
 
   // findByStatus() — used by GET /admin/organizers?status= (D-12).
+  // Returns full entities (all fields incl. status + email) — admin view, not public.
   // Returns all organizers when status param is absent (RESEARCH.md open question 1 resolution).
-  async findByStatus(status?: OrganizerStatus): Promise<OrganizerPublicResponseDto[]> {
-    const organizers = await this.organizerRepository.find(
+  async findByStatus(status?: OrganizerStatus): Promise<OrganizerEntity[]> {
+    return this.organizerRepository.find(
       status ? { where: { status } } : undefined,
     );
-    return organizers.map((org) => this.toPublicResponse(org));
   }
 
   // findAuditHistory() — used by GET /admin/organizers/:id/history (D-14).

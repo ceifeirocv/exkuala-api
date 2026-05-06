@@ -18,7 +18,7 @@ export class OrganizersController {
   @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Submit an organizer application' })
-  @ApiResponse({ status: 201, description: 'Application submitted. Status is pending.' })
+  @ApiResponse({ status: 201, type: OrganizerSelfResponseDto, description: 'Application submitted. Status is pending.' })
   @ApiResponse({ status: 409, description: 'Application already exists or invalid state transition.' })
   apply(
     @CurrentUser() user: AuthenticatedUser,
@@ -33,7 +33,7 @@ export class OrganizersController {
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({ summary: "Get the authenticated user's own organizer application" })
-  @ApiResponse({ status: 200, description: 'Own organizer profile with all fields and latest rejection note.' })
+  @ApiResponse({ status: 200, type: OrganizerSelfResponseDto, description: 'Own organizer profile with all fields and latest rejection note.' })
   @ApiResponse({ status: 404, description: 'No organizer application found for this user.' })
   findMe(@CurrentUser() user: AuthenticatedUser): Promise<OrganizerSelfResponseDto> {
     return this.organizersService.findSelfWithLatestNote(user.id);
@@ -42,14 +42,11 @@ export class OrganizersController {
   @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get public organizer profile (approved organizers only)' })
-  @ApiResponse({ status: 200, description: 'Public organizer profile. Email is not included.' })
+  @ApiResponse({ status: 200, type: OrganizerPublicResponseDto, description: 'Public organizer profile. Email is not included.' })
   @ApiResponse({ status: 404, description: 'Organizer not found or not approved.' })
-  findById(@Param('id') id: string): Promise<OrganizerPublicResponseDto> {
-    // findApprovedById returns OrganizerEntity (status-gated: throws 404 for pending/rejected per D-03).
-    // The entity is structurally compatible with OrganizerPublicResponseDto (superset of its fields).
-    // Email is not included in OrganizerPublicResponseDto per D-03.
-    // Note: HTTP serialization will include all entity fields unless serialization is configured.
-    // For strict email exclusion at runtime, apply a serialization interceptor in a future phase.
-    return this.organizersService.findApprovedById(id) as unknown as Promise<OrganizerPublicResponseDto>;
+  async findById(@Param('id') id: string): Promise<OrganizerPublicResponseDto> {
+    // toPublicResponse() explicitly excludes email (D-03) — never rely on a cast for field exclusion.
+    const entity = await this.organizersService.findApprovedById(id);
+    return this.organizersService.toPublicResponse(entity);
   }
 }
