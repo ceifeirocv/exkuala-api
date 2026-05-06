@@ -11,6 +11,9 @@ import { UserEntity } from './users/user.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { CategoryEntity } from './categories/category.entity';
 import { CategoryTranslationEntity } from './categories/category-translation.entity';
+import { OrganizersModule } from './organizers/organizers.module';
+import { OrganizerEntity } from './organizers/organizer.entity';
+import { OrganizerAuditLogEntity } from './organizers/organizer-audit-log.entity';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { CategoryTranslationEntity } from './categories/category-translation.ent
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
         url: cfg.get<string>('DATABASE_URL'),
-        entities: [UserEntity, EventEntity, CategoryEntity, CategoryTranslationEntity],
+        entities: [UserEntity, EventEntity, CategoryEntity, CategoryTranslationEntity, OrganizerEntity, OrganizerAuditLogEntity],
         migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
         // IMPORTANT: synchronize only in development — NEVER in production (D-04)
         // synchronize: true auto-applies schema changes without running migration files.
@@ -36,6 +39,7 @@ import { CategoryTranslationEntity } from './categories/category-translation.ent
     AuthModule,
     WebhooksModule,   // registers /api/v1/webhooks/auth0 endpoint
     CategoriesModule, // registers /api/v1/categories endpoints
+    OrganizersModule, // registers /api/v1/organizers and /api/v1/admin/organizers endpoints
   ],
   controllers: [AppController],
   providers: [AppService],
