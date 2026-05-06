@@ -11,9 +11,9 @@
 
 ### Organizers (ORG)
 
-- [ ] **ORG-01**: Authenticated user can submit an organizer application (name, description, contact info)
-- [ ] **ORG-02**: Admin can approve or reject an organizer application with optional notes
-- [ ] **ORG-03**: Approved organizer has a public profile (name, bio, contact)
+- [x] **ORG-01**: Authenticated user can submit an organizer application (name, description, contact info)
+- [x] **ORG-02**: Admin can approve or reject an organizer application with optional notes
+- [x] **ORG-03**: Approved organizer has a public profile (name, bio, contact)
 - [ ] **ORG-04**: Organizer can create, edit, and delete their own events
 - [ ] **ORG-05**: Organizer can only manage events they own (ownership enforced at service layer)
 
@@ -96,9 +96,9 @@
 | AUTH-02 | Phase 2 — Auth Infrastructure | Complete |
 | AUTH-03 | Phase 3 — Users | Complete |
 | AUTH-04 | Phase 2 — Auth Infrastructure | Complete |
-| ORG-01 | Phase 5 — Organizers | Pending |
-| ORG-02 | Phase 5 — Organizers | Pending |
-| ORG-03 | Phase 5 — Organizers | Pending |
+| ORG-01 | Phase 5 — Organizers | Complete |
+| ORG-02 | Phase 5 — Organizers | Complete |
+| ORG-03 | Phase 5 — Organizers | Complete |
 | ORG-04 | Phase 6 — Organizer Event CRUD | Pending |
 | ORG-05 | Phase 6 — Organizer Event CRUD | Pending |
 | EVT-01 | Phase 6 — Organizer Event CRUD | Pending |

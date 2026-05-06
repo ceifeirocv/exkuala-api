@@ -144,7 +144,7 @@ Plans:
 **Plans**: 5 plans in 4 waves
 
 Plans:
-- [ ] 05-01-PLAN.md — Wave 0: TDD RED stubs (organizers.service.spec.ts, organizers.controller.spec.ts, admin-organizers.controller.spec.ts)
+- [x] 05-01-PLAN.md — Wave 0: TDD RED stubs (organizers.service.spec.ts, organizers.controller.spec.ts, admin-organizers.controller.spec.ts)
 - [ ] 05-02-PLAN.md — Wave 1: OrganizerEntity, OrganizerAuditLogEntity, DTOs, TypeORM migration
 - [ ] 05-03-PLAN.md — Wave 2: OrganizersService (state machine, apply/approve/reject, audit log), OrganizerGuard, @CurrentOrganizer() decorator
 - [ ] 05-04-PLAN.md — Wave 3: OrganizersController, AdminOrganizersController, OrganizersModule, AppModule wiring
