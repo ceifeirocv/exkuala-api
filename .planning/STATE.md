@@ -93,6 +93,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 - [ ] Fix pnpm/npm SSL and config warnings on `migration:run`: (1) npm config bleedthrough (`npm-globalconfig`, `verify-deps-before-run`, `_jsr-registry`) — clean up global npm config; (2) pg-connection-string SSL mode deprecation — upgrade to `pg-connection-string` v3 or add `sslmode=verify-full` to DATABASE_URL when SSL is used.
+- [ ] Audit graph community edges and cohesion for UserEntity / AuthenticatedUser — verify inferred edges (OrganizerEntity→UserEntity, AuthenticatedUser→UserEntity), investigate Organizer Access Control cohesion 0.08, trace AuthenticatedUser bridging 3 communities. See `.planning/todos/pending/2026-05-07-audit-graph-community-edges-userentity.md`.
 
 ### Blockers/Concerns
 
@@ -113,4 +114,4 @@ Recent decisions affecting current work:
 
 Last session: 2026-05-07T00:00:00.000Z
 Stopped at: Phase 5 complete — human checkpoint approved, verifier passed
-Resume file: .planning/phases/06-events/06-CONTEXT.md
+Resume file: .planning/phases/06-organizer-event-crud/06-CONTEXT.md (not yet created — Phase 6 not started)
