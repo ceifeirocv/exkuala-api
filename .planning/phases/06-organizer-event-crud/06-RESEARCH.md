@@ -896,22 +896,25 @@ export class EventPaginationQueryDto {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **NULL organizerId row cleanup strategy**
    - What we know: The baseline migration created `events` with `organizerId` nullable. Any existing rows with NULL organizerId will block `ALTER COLUMN SET NOT NULL`.
    - What's unclear: Does the dev/staging database have real event rows with NULL organizerId that should be preserved?
    - Recommendation: Planner should confirm. Research defaults to DELETE (dev database, no real data). If real data exists, assign a seed organizer ID instead.
+   - **RESOLVED (Plan 03):** `DELETE FROM "events" WHERE "organizerId" IS NULL` before ALTER COLUMN SET NOT NULL.
 
 2. **PATCH: combined field update + status transition in one request**
    - What we know: D-07 says single endpoint drives transitions. Context.md Claude's Discretion: planner decides whether combined update is allowed.
    - What's unclear: If a PATCH sends `{ title: "New Title", status: "published" }`, should the title change AND the publish transition happen atomically? Or should status-only PATCH and field-only PATCH be enforced as separate operations?
    - Recommendation: Allow combined update. Service applies field changes to the in-memory entity first, then runs assertPublishGate against the merged state, then saves once. This is the most ergonomic and correct behavior.
+   - **RESOLVED (Plan 04):** Combined field + status update allowed. Service applies field changes to in-memory entity first, then asserts transition and publish gate against merged state, then saves once.
 
 3. **ON DELETE behavior for FK_events_organizerId**
    - What we know: Migration adds FK constraint `organizerId → organizers(id)`.
    - What's unclear: What happens to an organizer's events if the organizer is deleted? `ON DELETE CASCADE` deletes all events; `ON DELETE RESTRICT` prevents organizer deletion while events exist; `ON DELETE SET NULL` would conflict with NOT NULL.
    - Recommendation: `ON DELETE CASCADE` is safest for data integrity (orphaned events are never surfaced). Matches the `organizer_audit_log` FK pattern in the Phase 5 migration.
+   - **RESOLVED (Plan 03):** `ON DELETE CASCADE` for organizerId FK; `ON DELETE SET NULL` for categoryId FK.
 
 ---
 
