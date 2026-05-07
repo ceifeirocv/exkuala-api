@@ -107,7 +107,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Wave 0: Test stubs (findOrCreate tests in users.service.spec.ts, async validate tests in jwt.strategy.spec.ts)
-- [ ] 03-02-PLAN.md — Wave 1: AuthenticatedUser type, Express augmentation, UsersService.findOrCreate(), async JwtStrategy.validate(), AuthModule wiring, @CurrentUser() decorator
+- [x] 03-02-PLAN.md — Wave 1: AuthenticatedUser type, Express augmentation, UsersService.findOrCreate(), async JwtStrategy.validate(), AuthModule wiring, @CurrentUser() decorator
 
 ---
 
@@ -148,7 +148,7 @@ Plans:
 - [x] 05-02-PLAN.md — Wave 1: OrganizerEntity, OrganizerAuditLogEntity, DTOs, TypeORM migration
 - [x] 05-03-PLAN.md — Wave 2: OrganizersService (state machine, apply/approve/reject, audit log), OrganizerGuard, @CurrentOrganizer() decorator
 - [x] 05-04-PLAN.md — Wave 3: OrganizersController, AdminOrganizersController, OrganizersModule, AppModule wiring
-- [ ] 05-05-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
+- [x] 05-05-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
 
 ---
 
@@ -232,9 +232,9 @@ Plans:
 | 1.1. Migrate from prisma to typeorm *(INSERTED)* | 6/6 | Complete | 2026-04-19 |
 | 2. Auth Infrastructure | 2/2 | Complete   | 2026-04-29 |
 | 02.1. Auth0 webhook endpoint *(INSERTED)* | 4/4 | Complete | 2026-05-02 |
-| 3. Users | 1/2 | In Progress|  |
+| 3. Users | 2/2 | Complete | 2026-05-03 |
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
-| 5. Organizers | 0/5 | Not started | - |
+| 5. Organizers | 5/5 | Complete | 2026-05-07 |
 | 6. Organizer Event CRUD | 0/2 | Not started | - |
 | 7. Public Event Discovery | 0/3 | Not started | - |
 | 8. RSVP | 0/2 | Not started | - |
@@ -246,13 +246,13 @@ Plans:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 3 | Pending |
-| AUTH-04 | Phase 2 | Pending |
-| ORG-01 | Phase 5 | Pending |
-| ORG-02 | Phase 5 | Pending |
-| ORG-03 | Phase 5 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
+| AUTH-03 | Phase 3 | Complete |
+| AUTH-04 | Phase 2 | Complete |
+| ORG-01 | Phase 5 | Complete |
+| ORG-02 | Phase 5 | Complete |
+| ORG-03 | Phase 5 | Complete |
 | ORG-04 | Phase 6 | Pending |
 | ORG-05 | Phase 6 | Pending |
 | EVT-01 | Phase 6 | Pending |
