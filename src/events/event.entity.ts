@@ -5,9 +5,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrganizerEntity } from '../organizers/organizer.entity';
+import { CategoryEntity } from '../categories/category.entity';
 
 export enum EventStatus {
   DRAFT = 'DRAFT',
@@ -65,7 +69,19 @@ export class EventEntity {
   status: EventStatus;
 
   @Column({ type: 'varchar', length: 30, nullable: true })
-  organizerId: string | null;
+  // TypeScript type is string (not null) per D-24: organizerId always set at create time.
+  // The @Column keeps nullable: true until migration 06-03 applies the NOT NULL DB constraint (D-04).
+  organizerId: string;
+
+  // Relation properties are optional (?) — not eagerly loaded; callers must explicitly join.
+  // Phase 6 service layer works with scalar organizerId/categoryId only.
+  @ManyToOne(() => OrganizerEntity, { nullable: false })
+  @JoinColumn({ name: 'organizerId' })
+  organizer?: OrganizerEntity;
+
+  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @JoinColumn({ name: 'categoryId' })
+  category?: CategoryEntity;
 
   // @DeleteDateColumn enables TypeORM automatic soft-delete filtering:
   // - repository.softDelete(id) sets this column
