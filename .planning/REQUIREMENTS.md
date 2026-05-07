@@ -14,16 +14,16 @@
 - [x] **ORG-01**: Authenticated user can submit an organizer application (name, description, contact info)
 - [x] **ORG-02**: Admin can approve or reject an organizer application with optional notes
 - [x] **ORG-03**: Approved organizer has a public profile (name, bio, contact)
-- [ ] **ORG-04**: Organizer can create, edit, and delete their own events
-- [ ] **ORG-05**: Organizer can only manage events they own (ownership enforced at service layer)
+- [x] **ORG-04**: Organizer can create, edit, and delete their own events
+- [x] **ORG-05**: Organizer can only manage events they own (ownership enforced at service layer)
 
 ### Events (EVT)
 
-- [ ] **EVT-01**: Organizer can create an event with: title, description, date/time, venue name, address, category, ticket price, external ticket link
-- [ ] **EVT-02**: Events have a status lifecycle: `draft` → `published` → `cancelled`; organizer controls state transitions
+- [x] **EVT-01**: Organizer can create an event with: title, description, date/time, venue name, address, category, ticket price, external ticket link
+- [x] **EVT-02**: Events have a status lifecycle: `draft` → `published` → `cancelled`; organizer controls state transitions
 - [ ] **EVT-03**: Admin can unpublish or remove any event regardless of organizer
 - [ ] **EVT-04**: Published events are publicly accessible without authentication
-- [ ] **EVT-05**: Events support soft delete (`deletedAt` timestamp — not physically removed)
+- [x] **EVT-05**: Events support soft delete (`deletedAt` timestamp — not physically removed)
 - [ ] **EVT-06**: Event list endpoint returns paginated results (cursor-based pagination)
 
 ### Discovery (DISC)
@@ -99,13 +99,13 @@
 | ORG-01 | Phase 5 — Organizers | Complete |
 | ORG-02 | Phase 5 — Organizers | Complete |
 | ORG-03 | Phase 5 — Organizers | Complete |
-| ORG-04 | Phase 6 — Organizer Event CRUD | Pending |
-| ORG-05 | Phase 6 — Organizer Event CRUD | Pending |
-| EVT-01 | Phase 6 — Organizer Event CRUD | Pending |
-| EVT-02 | Phase 6 — Organizer Event CRUD | Pending |
+| ORG-04 | Phase 6 — Organizer Event CRUD | Complete |
+| ORG-05 | Phase 6 — Organizer Event CRUD | Complete |
+| EVT-01 | Phase 6 — Organizer Event CRUD | Complete |
+| EVT-02 | Phase 6 — Organizer Event CRUD | Complete |
 | EVT-03 | Phase 9 — Admin Moderation | Pending |
 | EVT-04 | Phase 7 — Public Event Discovery | Pending |
-| EVT-05 | Phase 6 — Organizer Event CRUD | Pending |
+| EVT-05 | Phase 6 — Organizer Event CRUD | Complete |
 | EVT-06 | Phase 7 — Public Event Discovery | Pending |
 | DISC-01 | Phase 7 — Public Event Discovery | Pending |
 | DISC-02 | Phase 7 — Public Event Discovery | Pending |
