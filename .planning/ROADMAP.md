@@ -158,14 +158,18 @@ Plans:
 **Requirements**: ORG-04, ORG-05, EVT-01, EVT-02, EVT-05
 **Success Criteria** (what must be TRUE):
   1. Approved organizer can create an event with all required fields (title, description, date/time, venue, address, category, ticket price, ticket link)
-  2. Organizer can edit and delete only events they own — attempts to modify another organizer's event return 403
+  2. Organizer can edit and delete only events they own — attempts to modify another organizer's event return 404 (no 403 leakage)
   3. Event status transitions from `draft` to `published` to `cancelled` are organizer-controlled and validated
   4. Deleting an event sets `deletedAt` rather than removing the row; soft-deleted events do not appear in listings
-**Plans**: TBD
+**Plans**: 6 plans in 4 waves
 
 Plans:
-- [ ] 06-01: Event Prisma model (with deletedAt, status enum, organizer FK, category FK), EventsModule scaffold
-- [ ] 06-02: Organizer event CRUD endpoints, ownership guard, status transition service
+- [ ] 06-01-PLAN.md — Wave 0: TDD RED stubs (events.service.spec.ts, events.controller.spec.ts)
+- [ ] 06-02-PLAN.md — Wave 1: EventEntity @ManyToOne relations + 5 DTOs (create, update, response, paginated, pagination query)
+- [ ] 06-03-PLAN.md — Wave 1: TypeORM migration (FK constraints + NOT NULL on organizerId + 3 indexes)
+- [ ] 06-04-PLAN.md — Wave 2: EventsService (CRUD + ownership enforcement + state machine + publish gate + cursor pagination)
+- [ ] 06-05-PLAN.md — Wave 3: EventsController + EventsModule + AppModule wiring
+- [ ] 06-06-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
 
 ---
 
@@ -235,7 +239,7 @@ Plans:
 | 3. Users | 2/2 | Complete | 2026-05-03 |
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
 | 5. Organizers | 5/5 | Complete | 2026-05-07 |
-| 6. Organizer Event CRUD | 0/2 | Not started | - |
+| 6. Organizer Event CRUD | 0/6 | Not started | - |
 | 7. Public Event Discovery | 0/3 | Not started | - |
 | 8. RSVP | 0/2 | Not started | - |
 | 9. Admin Moderation | 0/2 | Not started | - |
