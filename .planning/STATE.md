@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 05-04-PLAN.md
-last_updated: "2026-05-06T11:35:16.822Z"
-last_activity: 2026-05-06
+status: completed
+stopped_at: Phase 5 complete — ready for Phase 6
+last_updated: "2026-05-07T00:00:00.000Z"
+last_activity: 2026-05-07
 progress:
   total_phases: 11
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 26
-  completed_plans: 25
-  percent: 96
+  completed_plans: 26
+  percent: 100
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 5 — Organizers (Phase 04 complete 2026-05-05)
+**Current focus:** Phase 6 — Events (Phase 05 complete 2026-05-07)
 
 ## Current Position
 
-Phase: 4 of 9 (Categories)
+Phase: 5 of 9 (Organizers)
 Plan: 5 of 5 in current phase
-Status: Phase complete — ready for verification
-Last activity: 2026-05-06
+Status: Phase complete — verified 2026-05-07
+Last activity: 2026-05-07
 
 Progress: [██████████] 96%
 
@@ -80,6 +80,10 @@ Recent decisions affecting current work:
 - [Phase ?]: They go RED in Wave 1 when implementation changes — two-wave TDD contract
 - [Phase 04-05]: Seeder scripts must use node dist/...seed.js (not ts-node) when AppDataSource.entities uses dist/** glob — ts-node loads source entity classes unregistered in the dist-based metadata registry
 - [Phase 04-05]: Use find-or-insert (not upsert) for idempotent seeds where the row PK is referenced by a FK in a child table — upsert updating id breaks FK constraints on re-run
+- [Phase 05]: Never cast raw entity to DTO — always call explicit mapping fn (toPublicResponse) or email leaks through
+- [Phase 05]: Admin list endpoints need full entity return (not public DTO) — public DTOs strip status field
+- [Phase 05]: Entities used as Swagger response types need @ApiProperty decorators — without them Swagger shows {}
+- [Phase 05]: findApprovedById() returns OrganizerEntity (not DTO) — callers map via toPublicResponse(); controller spec mock must include toPublicResponse mock
 
 ### Roadmap Evolution
 
@@ -107,6 +111,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-06T11:35:16.766Z
-Stopped at: Completed 05-04-PLAN.md
-Resume file: None
+Last session: 2026-05-07T00:00:00.000Z
+Stopped at: Phase 5 complete — human checkpoint approved, verifier passed
+Resume file: .planning/phases/06-events/06-CONTEXT.md

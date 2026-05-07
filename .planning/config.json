@@ -28,24 +28,6 @@
   },
   "commit_docs": true,
   "model_profile": "budget",
-  "model_overrides": {
-    "gsd-planner": "claude-haiku-4.5",
-    "gsd-executor": "claude-sonnet-4.6",
-    "gsd-checker": "claude-sonnet-4.6",
-    "gsd-verifier": "claude-sonnet-4.6",
-    "gsd-researcher": "claude-haiku-4.5",
-    "gsd-project-researcher": "claude-haiku-4.5",
-    "gsd-synthesizer": "claude-haiku-4.5",
-    "gsd-codebase-mapper": "claude-sonnet-4.6",
-    "gsd-advisor": "claude-haiku-4.5",
-    "gsd-roadmapper": "claude-haiku-4.5",
-    "gsd-debugger": "claude-sonnet-4.6",
-    "gsd-ui-researcher": "claude-sonnet-4.6",
-    "gsd-ui-checker": "claude-haiku-4.5",
-    "gsd-plan-checker": "claude-sonnet-4.6",
-    "gsd-integration-checker": "claude-sonnet-4.6",
-    "gsd-nyquist-auditor": "claude-sonnet-4.6"
-  },
   "intel": {
     "enabled": true
   },
