@@ -93,7 +93,10 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 - [ ] Fix pnpm/npm SSL and config warnings on `migration:run`: (1) npm config bleedthrough (`npm-globalconfig`, `verify-deps-before-run`, `_jsr-registry`) — clean up global npm config; (2) pg-connection-string SSL mode deprecation — upgrade to `pg-connection-string` v3 or add `sslmode=verify-full` to DATABASE_URL when SSL is used.
-- [ ] Audit graph community edges and cohesion for UserEntity / AuthenticatedUser — verify inferred edges (OrganizerEntity→UserEntity, AuthenticatedUser→UserEntity), investigate Organizer Access Control cohesion 0.08, trace AuthenticatedUser bridging 3 communities. See `.planning/todos/pending/2026-05-07-audit-graph-community-edges-userentity.md`.
+- [ ] Trace why UserEntity bridges three graph communities (Users/Webhook, JWT, Organizer DTOs)
+- [ ] Verify inferred graph edges OrganizerEntity→UserEntity and AuthenticatedUser→UserEntity
+- [ ] Evaluate splitting Organizer Access Control module (cohesion 0.08)
+- [ ] Trace AuthenticatedUser bridging JWT Strategy, Organizer Access Control, and Users communities
 
 ### Blockers/Concerns
 
