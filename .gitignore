@@ -60,6 +60,9 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # These are local to each machine and should not be committed
 **/.codegraph
 
+# Graphify data files
+/graphify-out
+
 # AI
 .claude
 
