@@ -165,9 +165,9 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md — Wave 0: TDD RED stubs (events.service.spec.ts, events.controller.spec.ts)
-- [ ] 06-02-PLAN.md — Wave 1: EventEntity @ManyToOne relations + 5 DTOs (create, update, response, paginated, pagination query)
+- [x] 06-02-PLAN.md — Wave 1: EventEntity @ManyToOne relations + 5 DTOs (create, update, response, paginated, pagination query)
 - [x] 06-03-PLAN.md — Wave 1: TypeORM migration (FK constraints + NOT NULL on organizerId + 3 indexes)
-- [ ] 06-04-PLAN.md — Wave 2: EventsService (CRUD + ownership enforcement + state machine + publish gate + cursor pagination)
+- [x] 06-04-PLAN.md — Wave 2: EventsService (CRUD + ownership enforcement + state machine + publish gate + cursor pagination)
 - [ ] 06-05-PLAN.md — Wave 3: EventsController + EventsModule + AppModule wiring
 - [ ] 06-06-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
 
@@ -239,7 +239,7 @@ Plans:
 | 3. Users | 2/2 | Complete | 2026-05-03 |
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
 | 5. Organizers | 5/5 | Complete | 2026-05-07 |
-| 6. Organizer Event CRUD | 1/6 | In Progress|  |
+| 6. Organizer Event CRUD | 4/6 | In Progress|  |
 | 7. Public Event Discovery | 0/3 | Not started | - |
 | 8. RSVP | 0/2 | Not started | - |
 | 9. Admin Moderation | 0/2 | Not started | - |
