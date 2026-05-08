@@ -14,6 +14,7 @@ import { CategoryTranslationEntity } from './categories/category-translation.ent
 import { OrganizersModule } from './organizers/organizers.module';
 import { OrganizerEntity } from './organizers/organizer.entity';
 import { OrganizerAuditLogEntity } from './organizers/organizer-audit-log.entity';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { OrganizerAuditLogEntity } from './organizers/organizer-audit-log.entity
     WebhooksModule,   // registers /api/v1/webhooks/auth0 endpoint
     CategoriesModule, // registers /api/v1/categories endpoints
     OrganizersModule, // registers /api/v1/organizers and /api/v1/admin/organizers endpoints
+    EventsModule,     // registers /api/v1/organizer/events endpoints
   ],
   controllers: [AppController],
   providers: [AppService],
