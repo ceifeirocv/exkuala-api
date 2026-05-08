@@ -166,7 +166,7 @@ Plans:
 Plans:
 - [x] 06-01-PLAN.md — Wave 0: TDD RED stubs (events.service.spec.ts, events.controller.spec.ts)
 - [ ] 06-02-PLAN.md — Wave 1: EventEntity @ManyToOne relations + 5 DTOs (create, update, response, paginated, pagination query)
-- [ ] 06-03-PLAN.md — Wave 1: TypeORM migration (FK constraints + NOT NULL on organizerId + 3 indexes)
+- [x] 06-03-PLAN.md — Wave 1: TypeORM migration (FK constraints + NOT NULL on organizerId + 3 indexes)
 - [ ] 06-04-PLAN.md — Wave 2: EventsService (CRUD + ownership enforcement + state machine + publish gate + cursor pagination)
 - [ ] 06-05-PLAN.md — Wave 3: EventsController + EventsModule + AppModule wiring
 - [ ] 06-06-PLAN.md — Wave 4: [BLOCKING] pnpm migration:run + full test suite + human verification
