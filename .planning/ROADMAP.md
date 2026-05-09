@@ -181,14 +181,17 @@ Plans:
   1. `GET /api/v1/events` without authentication returns only published events, paginated with cursor-based pagination
   2. Filtering by category slug, date range (start/end), and city returns correctly scoped results
   3. Full-text search on `title` and `description` via `?q=` returns relevant results using PostgreSQL tsvector
-  4. `GET /api/v1/events` with `Accept-Language: pt` returns event title and description in Portuguese where an `event_translations` row exists, falling back to default content otherwise
+  4. `GET /api/v1/events` returns a `translations` map `{ locale: { title, description } }` per event; clients resolve their preferred locale (client-side resolution per D-01, supersedes I18N-03 Accept-Language)
   5. `GET /api/v1/events/:id` is accessible without authentication and includes full event detail
-**Plans**: TBD
+**Plans**: 6 plans in 3 waves
 
 Plans:
-- [ ] 07-01: EventTranslation Prisma model, organizer endpoint to add/update translations per locale
-- [ ] 07-02: Public GET /events endpoint with cursor pagination, category/date/city filters
-- [ ] 07-03: Full-text search (PostgreSQL tsvector column + GIN index), Accept-Language i18n resolution for events
+- [ ] 07-01-PLAN.md — Wave 0: TDD RED stubs (public-events.controller.spec.ts, public-events.service.spec.ts, extend events.controller.spec.ts + events.service.spec.ts)
+- [ ] 07-02-PLAN.md — Wave 1: EventTranslationEntity (composite PK), extend EventEntity (imageUrl, city, searchVector, translations), 5 new DTOs
+- [ ] 07-03-PLAN.md — Wave 1: TypeORM migration (ALTER events, CREATE event_translations, GIN index, city index, tsvector triggers)
+- [ ] 07-04-PLAN.md — Wave 2: EventsService new methods (findPublished, findPublishedById, upsertTranslation, buildTranslationsMap)
+- [ ] 07-05-PLAN.md — Wave 2: PublicEventsController (@Public()), extend EventsController (PUT translations/:locale), EventsModule + AppModule wiring
+- [ ] 07-06-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + full test suite + human verification
 
 ---
 
@@ -240,7 +243,7 @@ Plans:
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
 | 5. Organizers | 5/5 | Complete | 2026-05-07 |
 | 6. Organizer Event CRUD | 4/6 | In Progress|  |
-| 7. Public Event Discovery | 0/3 | Not started | - |
+| 7. Public Event Discovery | 0/6 | Not started | - |
 | 8. RSVP | 0/2 | Not started | - |
 | 9. Admin Moderation | 0/2 | Not started | - |
 
