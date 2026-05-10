@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganizerGuard } from '../auth/guards/organizer.guard';
 import { CurrentOrganizer } from '../auth/decorators/current-organizer.decorator';
@@ -9,6 +9,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { EventPaginationQueryDto } from './dto/event-pagination-query.dto';
 import { EventResponseDto } from './dto/event-response.dto';
 import { PaginatedEventsResponseDto } from './dto/paginated-events-response.dto';
+import { UpsertEventTranslationDto } from './dto/upsert-event-translation.dto';
 
 // Registered at /api/v1/organizer/events via global prefix + URI versioning (D-22)
 @ApiTags('Organizer Events')
@@ -74,5 +75,19 @@ export class EventsController {
     @Param('id') id: string,
   ): Promise<void> {
     return this.eventsService.softDeleteDraft(organizer.id, id);
+  }
+
+  @Put(':id/translations/:locale')
+  @ApiOperation({ summary: 'Upsert a translation for one locale (organizer-owned events only)' })
+  @ApiResponse({ status: 200, description: 'Updated translation object.' })
+  @ApiResponse({ status: 404, description: 'Event not found or not owned by this organizer.' })
+  upsertTranslation(
+    @CurrentOrganizer() organizer: OrganizerEntity,
+    @Param('id') id: string,
+    @Param('locale') locale: string,
+    @Body() dto: UpsertEventTranslationDto,
+  ): Promise<{ locale: string; title: string; description: string | null }> {
+    // organizerId from guard-resolved entity — never from body (mirrors T-06-04-01 pattern)
+    return this.eventsService.upsertTranslation(organizer.id, id, locale, dto);
   }
 }
