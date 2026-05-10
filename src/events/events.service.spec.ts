@@ -3,7 +3,9 @@ import { ConflictException, NotFoundException, UnprocessableEntityException } fr
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { EventEntity, EventStatus } from './event.entity';
+import { EventTranslationEntity } from './event-translation.entity'; // RED: Wave 1 creates this
 import { EventsService } from './events.service';
+import { UpsertEventTranslationDto } from './dto/upsert-event-translation.dto'; // RED: Wave 1 creates this
 
 // Named mock repository per CLAUDE.md: "Mock external I/O with named fake classes, not inline stubs"
 const mockQueryBuilder = {
@@ -22,6 +24,12 @@ const mockEventRepository = {
   find: jest.fn(),
   softDelete: jest.fn(),
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
+};
+
+// Phase 7 — translation repository mock
+const mockTranslationRepository = {
+  upsert: jest.fn(),
+  findOneOrFail: jest.fn(),
 };
 
 describe('EventsService', () => {
@@ -43,6 +51,7 @@ describe('EventsService', () => {
       providers: [
         EventsService,
         { provide: getRepositoryToken(EventEntity), useValue: mockEventRepository },
+        { provide: getRepositoryToken(EventTranslationEntity), useValue: mockTranslationRepository }, // Phase 7
       ],
     }).compile();
 
@@ -215,6 +224,27 @@ describe('EventsService', () => {
 
     it('throws NotFoundException for non-owned event', async () => {
       await expect(Promise.reject(new NotFoundException())).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('upsertTranslation() (I18N-01, D-03)', () => {
+    it('throws NotFoundException when event does not belong to organizer', async () => {
+      mockEventRepository.findOne.mockResolvedValue(null);
+      await expect(
+        service.upsertTranslation('org-01', 'evt-999', 'pt', { title: 'T', description: null } as UpsertEventTranslationDto),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('upserts translation row and returns { locale, title, description }', async () => {
+      mockEventRepository.findOne.mockResolvedValue({ id: 'evt-01', organizerId: 'org-01', status: EventStatus.DRAFT });
+      mockTranslationRepository.upsert.mockResolvedValue(undefined);
+      mockTranslationRepository.findOneOrFail.mockResolvedValue({ locale: 'pt', title: 'Noite de Jazz', description: null });
+      const result = await service.upsertTranslation('org-01', 'evt-01', 'pt', { title: 'Noite de Jazz' } as UpsertEventTranslationDto);
+      expect(result).toEqual({ locale: 'pt', title: 'Noite de Jazz', description: null });
+      expect(mockTranslationRepository.upsert).toHaveBeenCalledWith(
+        expect.objectContaining({ eventId: 'evt-01', locale: 'pt', title: 'Noite de Jazz' }),
+        expect.objectContaining({ conflictPaths: ['eventId', 'locale'] }),
+      );
     });
   });
 });

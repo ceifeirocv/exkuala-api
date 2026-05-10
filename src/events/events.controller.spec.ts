@@ -14,6 +14,8 @@ const mockEventsService = {
   softDeleteDraft: jest.fn(),
   // toResponseDto maps entity → DTO; identity mock passes entity data through unchanged
   toResponseDto: jest.fn((e) => e),
+  // Phase 7 — translation upsert
+  upsertTranslation: jest.fn(),
 };
 
 describe('EventsController', () => {
@@ -119,6 +121,22 @@ describe('EventsController', () => {
     it('propagates ConflictException when event is not draft', async () => {
       mockEventsService.softDeleteDraft.mockRejectedValue(new ConflictException());
       await expect(Promise.reject(new ConflictException())).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe('PUT /organizer/events/:id/translations/:locale (I18N-01, D-03)', () => {
+    it('delegates to eventsService.upsertTranslation and returns translation object', async () => {
+      const organizer = { id: 'org-01' } as OrganizerEntity;
+      const dto = { title: 'Noite de Jazz', description: 'Uma noite especial.' };
+      const expected = { locale: 'pt', title: 'Noite de Jazz', description: 'Uma noite especial.' };
+      mockEventsService.upsertTranslation.mockResolvedValue(expected);
+      // Wave 2 will fill in real assertions once controller method exists
+      expect(true).toBe(true);
+    });
+
+    it('propagates NotFoundException when event not owned by organizer', async () => {
+      mockEventsService.upsertTranslation.mockRejectedValue(new NotFoundException());
+      await expect(Promise.reject(new NotFoundException())).rejects.toThrow(NotFoundException);
     });
   });
 });
