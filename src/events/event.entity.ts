@@ -7,11 +7,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrganizerEntity } from '../organizers/organizer.entity';
 import { CategoryEntity } from '../categories/category.entity';
+import { EventTranslationEntity } from './event-translation.entity';
 
 export enum EventStatus {
   DRAFT = 'DRAFT',
@@ -60,6 +62,18 @@ export class EventEntity {
   @Column({ type: 'varchar', length: 2048, nullable: true })
   externalTicketUrl: string | null;
 
+  // Phase 7: deferred from Phase 6 (06-CONTEXT.md D-14)
+  @Column({ type: 'varchar', length: 2048, nullable: true })
+  imageUrl: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  city: string | null;
+
+  // tsvector column — kept in sync by DB trigger (D-04), never written by TypeORM.
+  // select: false prevents TypeORM from including it in default SELECT * queries.
+  @Column({ type: 'tsvector', nullable: true, select: false })
+  searchVector: unknown;
+
   @Column({
     type: 'enum',
     enum: EventStatus,
@@ -82,6 +96,10 @@ export class EventEntity {
   @ManyToOne(() => CategoryEntity, { nullable: true })
   @JoinColumn({ name: 'categoryId' })
   category?: CategoryEntity;
+
+  // eager: false — join translations explicitly when needed (avoids N+1 on organizer listing)
+  @OneToMany(() => EventTranslationEntity, (t) => t.event, { eager: false })
+  translations: EventTranslationEntity[];
 
   // @DeleteDateColumn enables TypeORM automatic soft-delete filtering:
   // - repository.softDelete(id) sets this column
