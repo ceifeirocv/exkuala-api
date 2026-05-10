@@ -22,16 +22,16 @@
 - [x] **EVT-01**: Organizer can create an event with: title, description, date/time, venue name, address, category, ticket price, external ticket link
 - [x] **EVT-02**: Events have a status lifecycle: `draft` → `published` → `cancelled`; organizer controls state transitions
 - [ ] **EVT-03**: Admin can unpublish or remove any event regardless of organizer
-- [ ] **EVT-04**: Published events are publicly accessible without authentication
+- [x] **EVT-04**: Published events are publicly accessible without authentication
 - [x] **EVT-05**: Events support soft delete (`deletedAt` timestamp — not physically removed)
 - [ ] **EVT-06**: Event list endpoint returns paginated results (cursor-based pagination)
 
 ### Discovery (DISC)
 
-- [ ] **DISC-01**: Public event listing can be filtered by category
+- [x] **DISC-01**: Public event listing can be filtered by category
 - [ ] **DISC-02**: Public event listing can be filtered by date range (start/end date params)
-- [ ] **DISC-03**: Public event listing can be filtered by city/location
-- [ ] **DISC-04**: Public event listing supports full-text search on title and description (PostgreSQL tsvector)
+- [x] **DISC-03**: Public event listing can be filtered by city/location
+- [x] **DISC-04**: Public event listing supports full-text search on title and description (PostgreSQL tsvector)
 
 ### Categories (CAT)
 
@@ -59,7 +59,7 @@
 
 ### Internationalization (I18N)
 
-- [ ] **I18N-01**: Event title and description support translations via a separate `event_translations` table (locale, title, description)
+- [x] **I18N-01**: Event title and description support translations via a separate `event_translations` table (locale, title, description)
 - [x] **I18N-02**: Category names support translations via a separate `category_translations` table (locale, name)
 - [ ] **I18N-03**: API returns translated content when a valid `Accept-Language` header is provided; falls back to default content if translation is not available
 
@@ -104,13 +104,13 @@
 | EVT-01 | Phase 6 — Organizer Event CRUD | Complete |
 | EVT-02 | Phase 6 — Organizer Event CRUD | Complete |
 | EVT-03 | Phase 9 — Admin Moderation | Pending |
-| EVT-04 | Phase 7 — Public Event Discovery | Pending |
+| EVT-04 | Phase 7 — Public Event Discovery | Complete |
 | EVT-05 | Phase 6 — Organizer Event CRUD | Complete |
 | EVT-06 | Phase 7 — Public Event Discovery | Pending |
-| DISC-01 | Phase 7 — Public Event Discovery | Pending |
+| DISC-01 | Phase 7 — Public Event Discovery | Complete |
 | DISC-02 | Phase 7 — Public Event Discovery | Pending |
-| DISC-03 | Phase 7 — Public Event Discovery | Pending |
-| DISC-04 | Phase 7 — Public Event Discovery | Pending |
+| DISC-03 | Phase 7 — Public Event Discovery | Complete |
+| DISC-04 | Phase 7 — Public Event Discovery | Complete |
 | CAT-01 | Phase 4 — Categories | Complete |
 | CAT-02 | Phase 4 — Categories | Pending |
 | CAT-03 | Phase 4 — Categories | Complete |
@@ -122,7 +122,7 @@
 | ADMIN-02 | Phase 9 — Admin Moderation | Pending |
 | ADMIN-03 | Phase 9 — Admin Moderation | Pending |
 | ADMIN-04 | Phase 9 — Admin Moderation | Pending |
-| I18N-01 | Phase 7 — Public Event Discovery | Pending |
+| I18N-01 | Phase 7 — Public Event Discovery | Complete |
 | I18N-02 | Phase 4 — Categories | Complete |
 | I18N-03 | Phase 7 — Public Event Discovery | Pending |
 | SEC-01 | Phase 1 — Foundation | Complete |
