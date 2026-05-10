@@ -49,20 +49,21 @@ export class EventsTranslationsFts1749000000000 implements MigrationInterface {
     // Step 5: Create tsvector update function for the events table (D-04, D-05, D-06).
     // 'simple' config: no stemming, no stop words — correct for multilingual content.
     // Concatenates default title+description AND all event_translations rows for this event.
-    // tsvector_agg() requires PostgreSQL 14+.
+    // Uses string_agg instead of tsvector_agg — Neon does not expose tsvector_agg
+    // despite running PostgreSQL 14+ internally (Neon serverless compatibility gap).
     await queryRunner.query(`
       CREATE OR REPLACE FUNCTION events_search_vector_update() RETURNS trigger AS $$
       BEGIN
         NEW.search_vector :=
           to_tsvector('simple', COALESCE(NEW.title, '')) ||
           to_tsvector('simple', COALESCE(NEW.description, '')) ||
-          (SELECT COALESCE(
-            tsvector_agg(to_tsvector('simple',
-              COALESCE(t.title, '') || ' ' || COALESCE(t.description, '')
-            )),
+          COALESCE(
+            (SELECT to_tsvector('simple', string_agg(
+              COALESCE(t.title, '') || ' ' || COALESCE(t.description, ''), ' '
+            ))
+            FROM event_translations t WHERE t."eventId" = NEW.id),
             to_tsvector('simple', '')
-          )
-          FROM event_translations t WHERE t."eventId" = NEW.id);
+          );
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql
@@ -85,20 +86,19 @@ export class EventsTranslationsFts1749000000000 implements MigrationInterface {
       DECLARE target_id varchar;
       BEGIN
         target_id := COALESCE(NEW."eventId", OLD."eventId");
-        UPDATE "events" SET "search_vector" = (
+        UPDATE "events" SET search_vector = (
           SELECT
             to_tsvector('simple', COALESCE(e.title, '')) ||
             to_tsvector('simple', COALESCE(e.description, '')) ||
             COALESCE(
-              tsvector_agg(to_tsvector('simple',
-                COALESCE(t.title, '') || ' ' || COALESCE(t.description, '')
-              )),
+              (SELECT to_tsvector('simple', string_agg(
+                COALESCE(t.title, '') || ' ' || COALESCE(t.description, ''), ' '
+              ))
+              FROM event_translations t WHERE t."eventId" = e.id),
               to_tsvector('simple', '')
             )
           FROM "events" e
-          LEFT JOIN event_translations t ON t."eventId" = e.id
           WHERE e.id = target_id
-          GROUP BY e.id, e.title, e.description
         )
         WHERE id = target_id;
         RETURN NEW;

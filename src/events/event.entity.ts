@@ -71,7 +71,9 @@ export class EventEntity {
 
   // tsvector column — kept in sync by DB trigger (D-04), never written by TypeORM.
   // select: false prevents TypeORM from including it in default SELECT * queries.
-  @Column({ type: 'tsvector', nullable: true, select: false })
+  // name: 'search_vector' — migration uses snake_case; explicit name prevents TypeORM
+  // synchronize from creating a separate searchVector column (camelCase default).
+  @Column({ name: 'search_vector', type: 'tsvector', nullable: true, select: false })
   searchVector: unknown;
 
   @Column({

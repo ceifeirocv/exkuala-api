@@ -174,7 +174,7 @@ export class EventsService {
     }
     if (query.q) {
       // D-07: plainto_tsquery handles multi-word phrases without requiring tsquery syntax knowledge
-      qb.andWhere("event.\"searchVector\" @@ plainto_tsquery('simple', :q)", { q: query.q });
+      qb.andWhere("event.search_vector @@ plainto_tsquery('simple', :q)", { q: query.q });
     }
     if (query.cursor) {
       const { cursorStartAt, cursorId } = EventsService.decodeCursor(query.cursor);
