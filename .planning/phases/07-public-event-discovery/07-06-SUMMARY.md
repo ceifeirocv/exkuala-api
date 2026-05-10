@@ -1,7 +1,7 @@
 ---
 phase: 07-public-event-discovery
 plan: 06
-status: awaiting-human-verification
+status: complete
 completed_at: "2026-05-10"
 ---
 

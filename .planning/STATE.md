@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 7 context gathered
-last_updated: "2026-05-10T11:37:48.097Z"
+status: ready
+stopped_at: Phase 7 complete — human verification approved
+last_updated: "2026-05-10T12:00:00.000Z"
 last_activity: 2026-05-10
 progress:
   total_phases: 11
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 38
-  completed_plans: 37
-  percent: 97
+  completed_plans: 38
+  percent: 100
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 6 — Events (Phase 05 complete 2026-05-07)
+**Current focus:** Phase 7 complete — ready for Phase 8 (RSVPs / interest)
 
 ## Current Position
 
-Phase: 5 of 9 (Organizers)
-Plan: 5 of 5 in current phase
-Status: Phase complete — ready for verification
+Phase: 7 of 9 (Public Event Discovery)
+Plan: 6 of 6 in current phase
+Status: Phase complete — human verified 2026-05-10
 Last activity: 2026-05-10
 
 Progress: [██████████] 97%
@@ -90,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 05]: findApprovedById() returns OrganizerEntity (not DTO) — callers map via toPublicResponse(); controller spec mock must include toPublicResponse mock
 - [Phase ?]: EventsService implementation
 - [Phase ?]: EventTranslationEntity composite PK (eventId, locale) — no surrogate id per D-01
+- [Phase 07]: TypeORM orderBy('alias."camelCol"') fails at runtime — use unquoted property name orderBy('alias.prop')
+- [Phase 07]: Neon does not expose tsvector_agg despite PG 17 — use string_agg + to_tsvector instead
+- [Phase 07]: Entity column name: add name: 'snake_case' to @Column when migration uses snake_case; else TypeORM sync creates duplicate camelCase column
 
 ### Roadmap Evolution
 
@@ -121,6 +124,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-05-10T11:37:48.048Z
-Stopped at: Phase 7 context gathered
+Last session: 2026-05-10T12:00:00.000Z
+Stopped at: Phase 7 complete
 Resume file: None
