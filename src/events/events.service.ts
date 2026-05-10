@@ -68,8 +68,8 @@ export class EventsService {
     const qb = this.eventRepository
       .createQueryBuilder('event')
       .where('event."organizerId" = :organizerId', { organizerId })
-      .orderBy('event."startAt"', 'ASC')
-      .addOrderBy('event."id"', 'ASC')
+      .orderBy('event.startAt', 'ASC')
+      .addOrderBy('event.id', 'ASC')
       .take(effectiveLimit + 1);
 
     if (query.status) {
@@ -155,8 +155,8 @@ export class EventsService {
       .leftJoinAndSelect('event.category', 'category')
       .leftJoinAndSelect('category.translations', 'categoryTranslation')
       .leftJoinAndSelect('event.translations', 'translation')
-      .orderBy('event."startAt"', 'ASC')
-      .addOrderBy('event."id"', 'ASC')
+      .orderBy('event.startAt', 'ASC')
+      .addOrderBy('event.id', 'ASC')
       .take(effectiveLimit + 1);
 
     if (query.category) {
