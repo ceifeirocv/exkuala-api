@@ -24,12 +24,12 @@
 - [ ] **EVT-03**: Admin can unpublish or remove any event regardless of organizer
 - [x] **EVT-04**: Published events are publicly accessible without authentication
 - [x] **EVT-05**: Events support soft delete (`deletedAt` timestamp — not physically removed)
-- [ ] **EVT-06**: Event list endpoint returns paginated results (cursor-based pagination)
+- [x] **EVT-06**: Event list endpoint returns paginated results (cursor-based pagination)
 
 ### Discovery (DISC)
 
 - [x] **DISC-01**: Public event listing can be filtered by category
-- [ ] **DISC-02**: Public event listing can be filtered by date range (start/end date params)
+- [x] **DISC-02**: Public event listing can be filtered by date range (start/end date params)
 - [x] **DISC-03**: Public event listing can be filtered by city/location
 - [x] **DISC-04**: Public event listing supports full-text search on title and description (PostgreSQL tsvector)
 
@@ -106,9 +106,9 @@
 | EVT-03 | Phase 9 — Admin Moderation | Pending |
 | EVT-04 | Phase 7 — Public Event Discovery | Complete |
 | EVT-05 | Phase 6 — Organizer Event CRUD | Complete |
-| EVT-06 | Phase 7 — Public Event Discovery | Pending |
+| EVT-06 | Phase 7 — Public Event Discovery | Complete |
 | DISC-01 | Phase 7 — Public Event Discovery | Complete |
-| DISC-02 | Phase 7 — Public Event Discovery | Pending |
+| DISC-02 | Phase 7 — Public Event Discovery | Complete |
 | DISC-03 | Phase 7 — Public Event Discovery | Complete |
 | DISC-04 | Phase 7 — Public Event Discovery | Complete |
 | CAT-01 | Phase 4 — Categories | Complete |
