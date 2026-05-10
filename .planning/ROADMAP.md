@@ -189,8 +189,8 @@ Plans:
 - [x] 07-01-PLAN.md — Wave 0: TDD RED stubs (public-events.controller.spec.ts, public-events.service.spec.ts, extend events.controller.spec.ts + events.service.spec.ts)
 - [x] 07-02-PLAN.md — Wave 1: EventTranslationEntity (composite PK), extend EventEntity (imageUrl, city, searchVector, translations), 5 new DTOs
 - [x] 07-03-PLAN.md — Wave 1: TypeORM migration (ALTER events, CREATE event_translations, GIN index, city index, tsvector triggers)
-- [ ] 07-04-PLAN.md — Wave 2: EventsService new methods (findPublished, findPublishedById, upsertTranslation, buildTranslationsMap)
-- [ ] 07-05-PLAN.md — Wave 2: PublicEventsController (@Public()), extend EventsController (PUT translations/:locale), EventsModule + AppModule wiring
+- [x] 07-04-PLAN.md — Wave 2: EventsService new methods (findPublished, findPublishedById, upsertTranslation, buildTranslationsMap)
+- [x] 07-05-PLAN.md — Wave 2: PublicEventsController (@Public()), extend EventsController (PUT translations/:locale), EventsModule + AppModule wiring
 - [ ] 07-06-PLAN.md — Wave 3: [BLOCKING] pnpm migration:run + full test suite + human verification
 
 ---
@@ -243,7 +243,7 @@ Plans:
 | 4. Categories | 5/5 | Complete | 2026-05-05 |
 | 5. Organizers | 5/5 | Complete | 2026-05-07 |
 | 6. Organizer Event CRUD | 4/6 | In Progress|  |
-| 7. Public Event Discovery | 3/6 | In Progress|  |
+| 7. Public Event Discovery | 5/6 | In Progress|  |
 | 8. RSVP | 0/2 | Not started | - |
 | 9. Admin Moderation | 0/2 | Not started | - |
 
