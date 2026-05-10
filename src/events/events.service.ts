@@ -13,6 +13,12 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { EventResponseDto } from './dto/event-response.dto';
 import { PaginatedEventsResponseDto } from './dto/paginated-events-response.dto';
 import { EventPaginationQueryDto } from './dto/event-pagination-query.dto';
+import { EventTranslationEntity } from './event-translation.entity';
+import { PublicEventsQueryDto } from './dto/public-events-query.dto';
+import { PaginatedPublicEventsResponseDto } from './dto/paginated-public-events-response.dto';
+import { PublicEventListItemDto } from './dto/public-event-list-item.dto';
+import { PublicEventDetailDto } from './dto/public-event-detail.dto';
+import { UpsertEventTranslationDto } from './dto/upsert-event-translation.dto';
 
 // Required fields for publishing an event per D-10.
 const PUBLISH_REQUIRED_FIELDS: (keyof EventEntity)[] = [
@@ -37,6 +43,8 @@ export class EventsService {
   constructor(
     @InjectRepository(EventEntity)
     private readonly eventRepository: Repository<EventEntity>,
+    @InjectRepository(EventTranslationEntity)
+    private readonly translationRepository: Repository<EventTranslationEntity>,
   ) {}
 
   // create() — always sets status=DRAFT and organizerId from caller (never body) per T-06-04-01.
@@ -134,6 +142,89 @@ export class EventsService {
     await this.eventRepository.softDelete(eventId);
   }
 
+  // findPublished() — cursor-paginated public listing for unauthenticated clients.
+  // Applies status=PUBLISHED filter, joins organizer+category+translations.
+  // Filters: category slug (DISC-01), date range (DISC-02), city prefix (DISC-03),
+  // full-text search (DISC-04), cursor (EVT-06). D-13 canonical pagination shape.
+  async findPublished(query: PublicEventsQueryDto): Promise<PaginatedPublicEventsResponseDto> {
+    const effectiveLimit = Math.min(query.limit ?? 20, 100);
+    const qb = this.eventRepository
+      .createQueryBuilder('event')
+      .where('event."status" = :status', { status: EventStatus.PUBLISHED })
+      .leftJoinAndSelect('event.organizer', 'organizer')
+      .leftJoinAndSelect('event.category', 'category')
+      .leftJoinAndSelect('category.translations', 'categoryTranslation')
+      .leftJoinAndSelect('event.translations', 'translation')
+      .orderBy('event."startAt"', 'ASC')
+      .addOrderBy('event."id"', 'ASC')
+      .take(effectiveLimit + 1);
+
+    if (query.category) {
+      qb.andWhere('category."slug" = :slug', { slug: query.category });
+    }
+    if (query.start) {
+      qb.andWhere('event."startAt" >= :start', { start: query.start });
+    }
+    if (query.end) {
+      qb.andWhere('event."startAt" <= :end', { end: query.end });
+    }
+    if (query.city) {
+      // D-09: case-insensitive LIKE prefix — allows 'Pra' to match 'Praia'
+      qb.andWhere("LOWER(event.\"city\") LIKE LOWER(:city) || '%'", { city: query.city });
+    }
+    if (query.q) {
+      // D-07: plainto_tsquery handles multi-word phrases without requiring tsquery syntax knowledge
+      qb.andWhere("event.\"searchVector\" @@ plainto_tsquery('simple', :q)", { q: query.q });
+    }
+    if (query.cursor) {
+      const { cursorStartAt, cursorId } = EventsService.decodeCursor(query.cursor);
+      qb.andWhere(
+        '(event."startAt", event."id") > (:cursorStartAt::timestamptz, :cursorId)',
+        { cursorStartAt, cursorId },
+      );
+    }
+
+    const rows = await qb.getMany();
+    const hasMore = rows.length > effectiveLimit;
+    const data = hasMore ? rows.slice(0, effectiveLimit) : rows;
+    const lastItem = data[data.length - 1];
+    const nextCursor =
+      hasMore && lastItem
+        ? EventsService.encodeCursor(lastItem.startAt, lastItem.id)
+        : null;
+
+    return {
+      data: data.map((e) => this.toPublicListItemDto(e)),
+      nextCursor,
+      hasMore,
+    };
+  }
+
+  // findPublishedById() — public event detail. 404 for non-published or non-existent (EVT-04).
+  async findPublishedById(id: string): Promise<PublicEventDetailDto> {
+    const event = await this.findPublishedOrThrow(id);
+    return this.toPublicDetailDto(event);
+  }
+
+  // upsertTranslation() — organizer adds/updates a per-locale translation (D-03, I18N-01).
+  // Ownership check via findOwnedOrThrow — returns 404 (not 403) for non-owned events.
+  async upsertTranslation(
+    organizerId: string,
+    eventId: string,
+    locale: string,
+    dto: UpsertEventTranslationDto,
+  ): Promise<{ locale: string; title: string; description: string | null }> {
+    await this.findOwnedOrThrow(eventId, organizerId);
+    await this.translationRepository.upsert(
+      { eventId, locale, title: dto.title, description: dto.description ?? null },
+      { conflictPaths: ['eventId', 'locale'], skipUpdateIfNoValuesChanged: true },
+    );
+    const saved = await this.translationRepository.findOneOrFail({
+      where: { eventId, locale },
+    });
+    return { locale: saved.locale, title: saved.title, description: saved.description };
+  }
+
   // toResponseDto() — manual mapping; deletedAt is intentionally excluded.
   toResponseDto(event: EventEntity): EventResponseDto {
     return {
@@ -152,6 +243,83 @@ export class EventsService {
       createdAt: event.createdAt,
       updatedAt: event.updatedAt,
     };
+  }
+
+  // findPublishedOrThrow() — 404 for non-published or non-existent events (EVT-04).
+  // No 403 — caller cannot distinguish unpublished from non-existent (no info leakage).
+  private async findPublishedOrThrow(eventId: string): Promise<EventEntity> {
+    const event = await this.eventRepository.findOne({
+      where: { id: eventId, status: EventStatus.PUBLISHED },
+      relations: ['organizer', 'category', 'category.translations', 'translations'],
+    });
+    if (!event) {
+      throw new NotFoundException(`Event with id '${eventId}' not found`);
+    }
+    return event;
+  }
+
+  // buildTranslationsMap() — reduce translations array to { locale: { title, description } }.
+  // Client picks preferred locale (D-01 — client-side locale resolution).
+  private buildTranslationsMap(
+    translations: EventTranslationEntity[],
+  ): Record<string, { title: string; description: string | null }> {
+    return Object.fromEntries(
+      translations.map((t) => [t.locale, { title: t.title, description: t.description }]),
+    );
+  }
+
+  // toPublicListItemDto() — maps EventEntity to PublicEventListItemDto.
+  // Excludes: ticketPrice, externalTicketUrl (D-12), deletedAt, organizerId scalar.
+  private toPublicListItemDto(event: EventEntity): PublicEventListItemDto {
+    return {
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      startAt: event.startAt,
+      endAt: event.endAt,
+      venueName: event.venueName,
+      address: event.address,
+      city: event.city ?? null,
+      imageUrl: event.imageUrl ?? null,
+      status: event.status,
+      category: event.category
+        ? { id: event.category.id, slug: event.category.slug, name: event.category.name }
+        : null,
+      organizer: { id: event.organizer!.id, name: event.organizer!.name },
+      translations: this.buildTranslationsMap(event.translations ?? []),
+      createdAt: event.createdAt,
+    };
+  }
+
+  // toPublicDetailDto() — extends list item with ticket info and full organizer/category (D-11).
+  private toPublicDetailDto(event: EventEntity): PublicEventDetailDto {
+    const base = this.toPublicListItemDto(event);
+    const categoryTranslations: Record<string, string> = event.category
+      ? Object.fromEntries(
+          (event.category.translations ?? []).map((t) => [t.locale, t.name]),
+        )
+      : {};
+    return {
+      ...base,
+      ticketPrice: event.ticketPrice ?? null,
+      externalTicketUrl: event.externalTicketUrl ?? null,
+      // OrganizerEntity has no bio/contact fields in v1 (D-11 aspirational shape);
+      // map available fields and null-fill the rest until entity is extended.
+      organizer: {
+        id: event.organizer!.id,
+        name: event.organizer!.name,
+        bio: null,
+        contact: null,
+      },
+      category: event.category
+        ? {
+            id: event.category.id,
+            slug: event.category.slug,
+            name: event.category.name,
+            translations: categoryTranslations,
+          }
+        : null,
+    } as PublicEventDetailDto;
   }
 
   // findOwnedOrThrow() — compound WHERE (id, organizerId) per D-21, T-06-04-02.

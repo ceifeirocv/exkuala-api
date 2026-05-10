@@ -231,7 +231,7 @@ describe('EventsService', () => {
     it('throws NotFoundException when event does not belong to organizer', async () => {
       mockEventRepository.findOne.mockResolvedValue(null);
       await expect(
-        service.upsertTranslation('org-01', 'evt-999', 'pt', { title: 'T', description: null } as UpsertEventTranslationDto),
+        service.upsertTranslation('org-01', 'evt-999', 'pt', { title: 'T' } as UpsertEventTranslationDto),
       ).rejects.toThrow(NotFoundException);
     });
 
