@@ -204,11 +204,10 @@ Plans:
   2. Authenticated user can cancel their RSVP; cancelled RSVPs no longer appear in their history
   3. `GET /api/v1/events/:id` includes `interestedCount` and `goingCount` aggregated from RSVP records
   4. `GET /api/v1/me/rsvps` returns the list of events the authenticated user has RSVPed to, with their RSVP state
-**Plans**: TBD
+**Plans**: 1 plan in 4 waves
 
 Plans:
-- [ ] 08-01: Rsvp Prisma model (User × Event unique constraint, state enum), RsvpModule, upsert endpoint
-- [ ] 08-02: Cancel RSVP endpoint, RSVP counts on event detail, user RSVP history endpoint
+- [ ] 08-PLAN.md — Wave 0-3: TDD RED stubs, RsvpEntity + DTOs + migration, RsvpService + controllers, module wiring + human verification
 
 ---
 
@@ -244,7 +243,7 @@ Plans:
 | 5. Organizers | 5/5 | Complete | 2026-05-07 |
 | 6. Organizer Event CRUD | 4/6 | In Progress|  |
 | 7. Public Event Discovery | 5/6 | In Progress|  |
-| 8. RSVP | 0/2 | Not started | - |
+| 8. RSVP | 0/1 | Not started | - |
 | 9. Admin Moderation | 0/2 | Not started | - |
 
 ---
