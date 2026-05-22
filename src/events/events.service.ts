@@ -19,6 +19,8 @@ import { PaginatedPublicEventsResponseDto } from './dto/paginated-public-events-
 import { PublicEventListItemDto } from './dto/public-event-list-item.dto';
 import { PublicEventDetailDto } from './dto/public-event-detail.dto';
 import { UpsertEventTranslationDto } from './dto/upsert-event-translation.dto';
+import { RsvpService } from '../rsvp/rsvp.service';
+import { RsvpState } from '../rsvp/rsvp.entity';
 
 // Required fields for publishing an event per D-10.
 const PUBLISH_REQUIRED_FIELDS: (keyof EventEntity)[] = [
@@ -45,6 +47,8 @@ export class EventsService {
     private readonly eventRepository: Repository<EventEntity>,
     @InjectRepository(EventTranslationEntity)
     private readonly translationRepository: Repository<EventTranslationEntity>,
+    // Phase 8 (RSVP-03): injected to call countByEventAndState() in findPublishedById()
+    private readonly rsvpService: RsvpService,
   ) {}
 
   // create() — always sets status=DRAFT and organizerId from caller (never body) per T-06-04-01.
@@ -200,10 +204,15 @@ export class EventsService {
     };
   }
 
-  // findPublishedById() — public event detail. 404 for non-published or non-existent (EVT-04).
+  // findPublishedById() — public event detail with live RSVP counts (RSVP-03, D-07).
+  // Promise.all() runs the three async ops in parallel to avoid serial round-trips.
   async findPublishedById(id: string): Promise<PublicEventDetailDto> {
-    const event = await this.findPublishedOrThrow(id);
-    return this.toPublicDetailDto(event);
+    const [event, interestedCount, goingCount] = await Promise.all([
+      this.findPublishedOrThrow(id),
+      this.rsvpService.countByEventAndState(id, RsvpState.INTERESTED),
+      this.rsvpService.countByEventAndState(id, RsvpState.GOING),
+    ]);
+    return this.toPublicDetailDto(event, interestedCount, goingCount);
   }
 
   // upsertTranslation() — organizer adds/updates a per-locale translation (D-03, I18N-01).
@@ -291,8 +300,13 @@ export class EventsService {
     };
   }
 
-  // toPublicDetailDto() — extends list item with ticket info and full organizer/category (D-11).
-  private toPublicDetailDto(event: EventEntity): PublicEventDetailDto {
+  // toPublicDetailDto() — extends list item with ticket info, full organizer/category, and RSVP counts (D-11).
+  // interestedCount and goingCount default to 0 for callers that haven't injected RsvpService yet.
+  private toPublicDetailDto(
+    event: EventEntity,
+    interestedCount = 0,
+    goingCount = 0,
+  ): PublicEventDetailDto {
     const base = this.toPublicListItemDto(event);
     const categoryTranslations: Record<string, string> = event.category
       ? Object.fromEntries(
@@ -319,6 +333,9 @@ export class EventsService {
             translations: categoryTranslations,
           }
         : null,
+      // Phase 8 (RSVP-03): live counts from countByEventAndState() (D-07, D-08)
+      interestedCount,
+      goingCount,
     } as PublicEventDetailDto;
   }
 

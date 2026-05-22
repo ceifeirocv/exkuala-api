@@ -7,6 +7,7 @@ import { EventEntity, EventStatus } from './event.entity';
 import { EventTranslationEntity } from './event-translation.entity'; // RED: file doesn't exist
 import { EventsService } from './events.service';
 import { PublicEventsQueryDto } from './dto/public-events-query.dto'; // RED: file doesn't exist
+import { RsvpService } from '../rsvp/rsvp.service'; // Phase 8: required by EventsService constructor
 
 const makeQb = () => ({
   where: jest.fn().mockReturnThis(),
@@ -32,6 +33,11 @@ const mockTranslationRepository = {
   findOneOrFail: jest.fn(),
 };
 
+// Phase 8: RsvpService mock required by EventsService constructor (RSVP-03)
+const mockRsvpService = {
+  countByEventAndState: jest.fn().mockResolvedValue(0),
+};
+
 describe('EventsService — Phase 7 public methods', () => {
   let service: EventsService;
 
@@ -44,6 +50,7 @@ describe('EventsService — Phase 7 public methods', () => {
         EventsService,
         { provide: getRepositoryToken(EventEntity), useValue: mockEventRepository },
         { provide: getRepositoryToken(EventTranslationEntity), useValue: mockTranslationRepository },
+        { provide: RsvpService, useValue: mockRsvpService }, // Phase 8: required by EventsService constructor
       ],
     }).compile();
 
