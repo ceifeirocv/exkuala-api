@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { createId } from '@paralleldrive/cuid2';
 import { RsvpEntity, RsvpState } from './rsvp.entity';
 import { EventEntity, EventStatus } from '../events/event.entity';
 import { CreateRsvpDto } from './dto/create-rsvp.dto';
@@ -48,7 +49,8 @@ export class RsvpService {
       .createQueryBuilder()
       .insert()
       .into(RsvpEntity)
-      .values({ userId, eventId, state: dto.state })
+      // id must be set explicitly — @BeforeInsert() does not fire on createQueryBuilder().insert()
+      .values({ id: createId(), userId, eventId, state: dto.state })
       // orUpdate: on (userId, eventId) conflict, update only state + updatedAt.
       // rsvpedAt, id, createdAt are intentionally excluded — they must not change on re-RSVP.
       .orUpdate(['state', 'updatedAt'], ['userId', 'eventId'])
