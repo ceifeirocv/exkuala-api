@@ -16,6 +16,8 @@ import { OrganizerEntity } from './organizers/organizer.entity';
 import { OrganizerAuditLogEntity } from './organizers/organizer-audit-log.entity';
 import { EventsModule } from './events/events.module';
 import { EventTranslationEntity } from './events/event-translation.entity';
+import { RsvpEntity } from './rsvp/rsvp.entity';
+import { MeModule } from './me/me.module';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { EventTranslationEntity } from './events/event-translation.entity';
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
         url: cfg.get<string>('DATABASE_URL'),
-        entities: [UserEntity, EventEntity, CategoryEntity, CategoryTranslationEntity, OrganizerEntity, OrganizerAuditLogEntity, EventTranslationEntity],
+        entities: [UserEntity, EventEntity, CategoryEntity, CategoryTranslationEntity, OrganizerEntity, OrganizerAuditLogEntity, EventTranslationEntity, RsvpEntity],
         migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
         // IMPORTANT: synchronize only in development — NEVER in production (D-04)
         // synchronize: true auto-applies schema changes without running migration files.
@@ -43,6 +45,7 @@ import { EventTranslationEntity } from './events/event-translation.entity';
     CategoriesModule, // registers /api/v1/categories endpoints
     OrganizersModule, // registers /api/v1/organizers and /api/v1/admin/organizers endpoints
     EventsModule,     // registers /api/v1/organizer/events endpoints
+    MeModule,         // registers /api/v1/me/rsvps endpoint
   ],
   controllers: [AppController],
   providers: [AppService],
