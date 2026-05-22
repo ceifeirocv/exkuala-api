@@ -6,6 +6,13 @@ import { EventEntity, EventStatus } from './event.entity';
 import { EventTranslationEntity } from './event-translation.entity'; // RED: Wave 1 creates this
 import { EventsService } from './events.service';
 import { UpsertEventTranslationDto } from './dto/upsert-event-translation.dto'; // RED: Wave 1 creates this
+import { RsvpService } from '../rsvp/rsvp.service'; // RED: Wave 2 creates this
+import { RsvpState } from '../rsvp/rsvp.entity'; // RED: Wave 1 creates this
+
+// Phase 8 — mock RsvpService for RSVP count tests
+const mockRsvpService = {
+  countByEventAndState: jest.fn(),
+};
 
 // Named mock repository per CLAUDE.md: "Mock external I/O with named fake classes, not inline stubs"
 const mockQueryBuilder = {
@@ -52,6 +59,7 @@ describe('EventsService', () => {
         EventsService,
         { provide: getRepositoryToken(EventEntity), useValue: mockEventRepository },
         { provide: getRepositoryToken(EventTranslationEntity), useValue: mockTranslationRepository }, // Phase 7
+        { provide: RsvpService, useValue: mockRsvpService }, // Phase 8
       ],
     }).compile();
 
@@ -224,6 +232,61 @@ describe('EventsService', () => {
 
     it('throws NotFoundException for non-owned event', async () => {
       await expect(Promise.reject(new NotFoundException())).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findPublishedById with RSVP counts (RSVP-03)', () => {
+    const mockPublishedEvent = {
+      id: 'evt-01',
+      title: 'Jazz Night',
+      status: EventStatus.PUBLISHED,
+      description: null,
+      startAt: new Date('2027-01-01'),
+      endAt: null,
+      venueName: null,
+      address: null,
+      city: null,
+      imageUrl: null,
+      ticketPrice: null,
+      externalTicketUrl: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      organizer: { id: 'org-01', name: 'Organizer One' },
+      category: null,
+      translations: [],
+    };
+
+    it('returns interestedCount as a number in the DTO', async () => {
+      mockEventRepository.findOne.mockResolvedValue(mockPublishedEvent);
+      mockRsvpService.countByEventAndState.mockResolvedValue(2);
+
+      const result = await service.findPublishedById('evt-01');
+
+      expect(typeof result.interestedCount).toBe('number');
+    });
+
+    it('returns goingCount as a number in the DTO', async () => {
+      mockEventRepository.findOne.mockResolvedValue(mockPublishedEvent);
+      mockRsvpService.countByEventAndState.mockResolvedValue(5);
+
+      const result = await service.findPublishedById('evt-01');
+
+      expect(typeof result.goingCount).toBe('number');
+    });
+
+    it('calls rsvpService.countByEventAndState() twice (once per state)', async () => {
+      mockEventRepository.findOne.mockResolvedValue(mockPublishedEvent);
+      mockRsvpService.countByEventAndState
+        .mockResolvedValueOnce(2) // INTERESTED
+        .mockResolvedValueOnce(3); // GOING
+
+      const result = await service.findPublishedById('evt-01');
+
+      expect(mockRsvpService.countByEventAndState).toHaveBeenCalledTimes(2);
+      expect(mockRsvpService.countByEventAndState).toHaveBeenCalledWith('evt-01', RsvpState.INTERESTED);
+      expect(mockRsvpService.countByEventAndState).toHaveBeenCalledWith('evt-01', RsvpState.GOING);
+      expect(result.interestedCount).toBe(2);
+      expect(result.goingCount).toBe(3);
     });
   });
 
