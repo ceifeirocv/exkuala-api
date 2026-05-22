@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -21,6 +22,10 @@ export enum RsvpState {
  * rsvpedAt is set on INSERT only — never overwritten on state update (@CreateDateColumn semantics).
  * Physical rows are never deleted; cancel sets state = CANCELLED.
  */
+// @Unique is REQUIRED here: synchronize:true in dev drops any DB constraint not declared on the entity.
+// Without this decorator, TypeORM wipes UQ_rsvps_userId_eventId on every app start, breaking
+// the ON CONFLICT upsert in RsvpService.upsertRsvp().
+@Unique(['userId', 'eventId'])
 @Entity('rsvps')
 export class RsvpEntity {
   @ApiProperty()
