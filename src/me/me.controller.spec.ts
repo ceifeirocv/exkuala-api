@@ -8,7 +8,13 @@ describe('MeController', () => {
   let controller: MeController;
   let mockRsvpService: { listUserRsvps: jest.Mock };
 
-  const mockUser: AuthenticatedUser = { id: 'user-01', auth0Id: 'auth0|123', roles: [] };
+  const mockUser: AuthenticatedUser = {
+    id: 'user-01',
+    auth0Id: 'auth0|123',
+    roles: [],
+    createdAt: new Date('2026-01-01'),
+    updatedAt: new Date('2026-01-01'),
+  };
 
   beforeEach(() => {
     mockRsvpService = {

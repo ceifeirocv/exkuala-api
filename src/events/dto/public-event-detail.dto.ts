@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PublicEventListItemDto } from './public-event-list-item.dto';
 
 /**
@@ -22,4 +22,11 @@ export class PublicEventDetailDto extends PublicEventListItemDto {
     name: string;
     translations: Record<string, string>;
   } | null;
+
+  // Phase 8 (RSVP-03): live COUNT of non-cancelled RSVPs per state (D-07, D-08)
+  @ApiProperty({ example: 0 })
+  interestedCount: number;
+
+  @ApiProperty({ example: 0 })
+  goingCount: number;
 }
