@@ -5,13 +5,26 @@ import { QueryFailedError } from 'typeorm';
 import { OrganizersService } from './organizers.service';
 import { OrganizerEntity, OrganizerStatus } from './organizer.entity';
 import { OrganizerAuditLogEntity, OrganizerAuditAction } from './organizer-audit-log.entity';
+// RED: these modules do not exist yet — import at top so the suite fails at compile time (not assertion time)
+import { OrganizerPaginationQueryDto } from './dto/organizer-pagination-query.dto';
+import { PaginatedOrganizersResponseDto } from './dto/paginated-organizers-response.dto';
 
 // Named mock repositories per CLAUDE.md: "Mock external I/O with named fake classes, not inline stubs"
+const mockQueryBuilder = {
+  orderBy: jest.fn().mockReturnThis(),
+  addOrderBy: jest.fn().mockReturnThis(),
+  take: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  andWhere: jest.fn().mockReturnThis(),
+  getMany: jest.fn(),
+};
+
 const mockOrganizerRepository = {
   findOne: jest.fn(),
   save: jest.fn(),
   create: jest.fn(),
   find: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
 };
 
 const mockAuditLogRepository = {
@@ -233,6 +246,114 @@ describe('OrganizersService', () => {
       mockOrganizerRepository.findOne.mockResolvedValue(organizer);
 
       await expect(service.findApprovedById('org-01')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findByStatusPaginated() (ADMIN-01)', () => {
+    beforeEach(() => {
+      // Reset query builder mocks between tests
+      mockQueryBuilder.getMany.mockReset();
+      mockOrganizerRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+    });
+
+    it('returns { data, nextCursor, hasMore } shape with hasMore false when results fit in limit', async () => {
+      const organizers = [
+        { id: 'org-01', status: OrganizerStatus.PENDING, createdAt: new Date('2026-01-01') } as OrganizerEntity,
+      ];
+      mockQueryBuilder.getMany.mockResolvedValue(organizers);
+
+      const query: OrganizerPaginationQueryDto = { limit: 20 };
+      const result: PaginatedOrganizersResponseDto = await service.findByStatusPaginated(query);
+
+      expect(result.data).toHaveLength(1);
+      expect(result.hasMore).toBe(false);
+      expect(result.nextCursor).toBeNull();
+    });
+
+    it('orders results by (createdAt ASC, id ASC)', async () => {
+      mockQueryBuilder.getMany.mockResolvedValue([]);
+
+      await service.findByStatusPaginated({});
+
+      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith('organizer.createdAt', 'ASC');
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith('organizer.id', 'ASC');
+    });
+
+    it('adds status where-clause when status is provided', async () => {
+      mockQueryBuilder.getMany.mockResolvedValue([]);
+
+      await service.findByStatusPaginated({ status: OrganizerStatus.PENDING });
+
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
+        expect.stringContaining('status'),
+        expect.objectContaining({ status: OrganizerStatus.PENDING }),
+      );
+    });
+
+    it('does not add status where-clause when status is omitted (returns all)', async () => {
+      mockQueryBuilder.getMany.mockResolvedValue([]);
+
+      await service.findByStatusPaginated({});
+
+      expect(mockQueryBuilder.where).not.toHaveBeenCalled();
+    });
+
+    it('returns hasMore true and non-null nextCursor when more results exist', async () => {
+      // Return limit+1 rows to signal more pages exist
+      const rows = Array.from({ length: 21 }, (_, i) => ({
+        id: `org-${i}`,
+        status: OrganizerStatus.PENDING,
+        createdAt: new Date(`2026-01-${String(i + 1).padStart(2, '0')}`),
+      } as OrganizerEntity));
+      mockQueryBuilder.getMany.mockResolvedValue(rows);
+
+      const result = await service.findByStatusPaginated({ limit: 20 });
+
+      expect(result.data).toHaveLength(20);
+      expect(result.hasMore).toBe(true);
+      expect(result.nextCursor).not.toBeNull();
+    });
+  });
+
+  describe('approve() with adminUserId (ADMIN-03)', () => {
+    it('writes an audit row with the passed adminUserId', async () => {
+      const organizer = {
+        id: 'org-01',
+        userId: 'user-01',
+        status: OrganizerStatus.PENDING,
+      } as OrganizerEntity;
+
+      mockOrganizerRepository.findOne.mockResolvedValue(organizer);
+      mockOrganizerRepository.save.mockResolvedValue({ ...organizer, status: OrganizerStatus.APPROVED });
+      mockAuditLogRepository.create.mockReturnValue({ action: OrganizerAuditAction.APPROVED, adminUserId: 'admin-01' });
+      mockAuditLogRepository.save.mockResolvedValue({});
+
+      await service.approve('org-01', 'admin-01', 'Looks great');
+
+      expect(mockAuditLogRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({ adminUserId: 'admin-01' }),
+      );
+    });
+  });
+
+  describe('reject() with adminUserId (ADMIN-03)', () => {
+    it('writes an audit row with the passed adminUserId', async () => {
+      const organizer = {
+        id: 'org-01',
+        userId: 'user-01',
+        status: OrganizerStatus.PENDING,
+      } as OrganizerEntity;
+
+      mockOrganizerRepository.findOne.mockResolvedValue(organizer);
+      mockOrganizerRepository.save.mockResolvedValue({ ...organizer, status: OrganizerStatus.REJECTED });
+      mockAuditLogRepository.create.mockReturnValue({ action: OrganizerAuditAction.REJECTED, adminUserId: 'admin-01' });
+      mockAuditLogRepository.save.mockResolvedValue({});
+
+      await service.reject('org-01', 'admin-01', 'Incomplete info');
+
+      expect(mockAuditLogRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({ adminUserId: 'admin-01' }),
+      );
     });
   });
 
