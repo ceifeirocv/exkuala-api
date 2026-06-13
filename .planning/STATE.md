@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
+status: executing
 stopped_at: Phase 9 context gathered
-last_updated: "2026-06-13T17:20:54.093Z"
-last_activity: 2026-06-13
+last_updated: "2026-06-13T18:01:27.265Z"
+last_activity: 2026-06-13 -- Phase 09 execution started
 progress:
   total_phases: 11
   completed_phases: 10
-  total_plans: 39
-  completed_plans: 39
-  percent: 91
+  total_plans: 43
+  completed_plans: 40
+  percent: 93
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-18)
 
 **Core value:** Help people discover local cultural events they'd otherwise miss — filtered by location and personal interests
-**Current focus:** Phase 8 complete — ready for Phase 9
+**Current focus:** Phase 09 — admin-moderation
 
 ## Current Position
 
-Phase: 8 of 9 (RSVP) — Plan 1 of 1 complete, human verified
-Plan: 1 of 1 in current phase
-Status: Phase complete — human verified 2026-05-22
-Last activity: 2026-06-13
+Phase: 09 (admin-moderation) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-06-13 -- Phase 09 execution started
 
-Progress: [██████████] 97%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [██████████] 97%
 | Phase 06-organizer-event-crud P04 | 15 | 1 tasks | 1 files |
 | Phase 07-public-event-discovery P02 | 5m | - tasks | - files |
 | Phase 07-public-event-discovery P05 | 12 | 2 tasks | 4 files |
+| Phase 09-admin-moderation P01 | 8min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,9 @@ Recent decisions affecting current work:
 - [Phase 07]: TypeORM orderBy('alias."camelCol"') fails at runtime — use unquoted property name orderBy('alias.prop')
 - [Phase 07]: Neon does not expose tsvector_agg despite PG 17 — use string_agg + to_tsvector instead
 - [Phase 07]: Entity column name: add name: 'snake_case' to @Column when migration uses snake_case; else TypeORM sync creates duplicate camelCase column
+- [Phase 09-01]: adminUserId sourced from AuthenticatedUser.id (local UserEntity.id), not user.sub — AuthenticatedUser interface has no sub field
+- [Phase 09-01]: adminUserId nullable on OrganizerAuditLogEntity so pre-Phase-9 rows need no backfill (D-12)
+- [Phase 09-01]: Organizer cursor keyset is (createdAt, id) — organizers have no startAt field (RESEARCH.md Pitfall 6)
 
 ### Roadmap Evolution
 
@@ -124,6 +128,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-06-13T17:20:54.074Z
-Stopped at: Phase 9 context gathered
-Resume file: .planning/phases/09-admin-moderation/09-CONTEXT.md
+Last session: 2026-06-13T18:00:00Z
+Stopped at: Completed 09-01-PLAN.md
+Resume file: None

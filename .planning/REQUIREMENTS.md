@@ -48,9 +48,9 @@
 
 ### Admin (ADMIN)
 
-- [ ] **ADMIN-01**: Admin can list all organizers filtered by status (pending / approved / rejected)
+- [x] **ADMIN-01**: Admin can list all organizers filtered by status (pending / approved / rejected)
 - [ ] **ADMIN-02**: Admin can list all events including drafts and unpublished
-- [ ] **ADMIN-03**: Admin can approve or reject organizer applications (see ORG-02)
+- [x] **ADMIN-03**: Admin can approve or reject organizer applications (see ORG-02)
 - [ ] **ADMIN-04**: Admin can unpublish or remove events (see EVT-03)
 
 ### Security (SEC)
@@ -118,9 +118,9 @@
 | RSVP-02 | Phase 8 — RSVP | Pending |
 | RSVP-03 | Phase 8 — RSVP | Pending |
 | RSVP-04 | Phase 8 — RSVP | Pending |
-| ADMIN-01 | Phase 9 — Admin Moderation | Pending |
+| ADMIN-01 | Phase 9 — Admin Moderation | Complete |
 | ADMIN-02 | Phase 9 — Admin Moderation | Pending |
-| ADMIN-03 | Phase 9 — Admin Moderation | Pending |
+| ADMIN-03 | Phase 9 — Admin Moderation | Complete |
 | ADMIN-04 | Phase 9 — Admin Moderation | Pending |
 | I18N-01 | Phase 7 — Public Event Discovery | Complete |
 | I18N-02 | Phase 4 — Categories | Complete |
