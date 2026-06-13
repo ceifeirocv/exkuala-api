@@ -265,7 +265,7 @@ Plans:
 Plans:
 
 - [x] 09-01-PLAN.md — Wave 1: Organizer admin surface — cursor pagination + adminUserId on approve/reject (ADMIN-01, ADMIN-03)
-- [ ] 09-02-PLAN.md — Wave 1: Event schema layer — EventStatus.SUSPENDED, statusBeforeSuspension, EventAuditLogEntity, admin DTOs, 2 migrations (EVT-03, ADMIN-02, ADMIN-04)
+- [x] 09-02-PLAN.md — Wave 1: Event schema layer — EventStatus.SUSPENDED, statusBeforeSuspension, EventAuditLogEntity, admin DTOs, 2 migrations (EVT-03, ADMIN-02, ADMIN-04)
 - [ ] 09-03-PLAN.md — Wave 2: AdminEventsService + AdminEventsController + frozen-SUSPENDED guard + module wiring (EVT-03, ADMIN-02, ADMIN-04)
 - [ ] 09-04-PLAN.md — Wave 3: [BLOCKING] pnpm run migration:run + full suite + human verification
 
@@ -287,7 +287,7 @@ Plans:
 | 6. Organizer Event CRUD | 4/6 | In Progress|  |
 | 7. Public Event Discovery | 5/6 | In Progress|  |
 | 8. RSVP | 0/1 | Not started | - |
-| 9. Admin Moderation | 1/4 | In Progress|  |
+| 9. Admin Moderation | 2/4 | In Progress|  |
 
 ---
 
