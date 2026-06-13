@@ -1,11 +1,14 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthenticatedUser } from '../types/auth';
 import { OrganizersService } from './organizers.service';
 import { OrganizerAuditLogEntity } from './organizer-audit-log.entity';
-import { OrganizerEntity, OrganizerStatus } from './organizer.entity';
 import { ApproveOrganizerDto } from './dto/approve-organizer.dto';
 import { RejectOrganizerDto } from './dto/reject-organizer.dto';
+import { OrganizerPaginationQueryDto } from './dto/organizer-pagination-query.dto';
+import { PaginatedOrganizersResponseDto } from './dto/paginated-organizers-response.dto';
 
 // Registered at /api/v1/admin/organizers via global prefix + URI versioning
 @ApiTags('Admin - Organizers')
@@ -17,10 +20,10 @@ export class AdminOrganizersController {
   // @Roles('admin') enforced by global RolesGuard (T-05-04-02)
   @Roles('admin')
   @Get()
-  @ApiOperation({ summary: 'List organizers, optionally filtered by status (admin only)' })
-  @ApiResponse({ status: 200, type: OrganizerEntity, isArray: true, description: 'Organizer list with status. Returns all statuses when status param is omitted.' })
-  findAll(@Query() query: { status?: OrganizerStatus }): Promise<OrganizerEntity[]> {
-    return this.organizersService.findByStatus(query.status);
+  @ApiOperation({ summary: 'List organizers with cursor pagination, optionally filtered by status (admin only)' })
+  @ApiResponse({ status: 200, type: PaginatedOrganizersResponseDto, description: 'Cursor-paginated organizer list. Returns all statuses when status param is omitted.' })
+  findAll(@Query() query: OrganizerPaginationQueryDto): Promise<PaginatedOrganizersResponseDto> {
+    return this.organizersService.findByStatusPaginated(query);
   }
 
   @Roles('admin')
@@ -37,8 +40,13 @@ export class AdminOrganizersController {
   @ApiOperation({ summary: 'Approve an organizer application (admin only)' })
   @ApiResponse({ status: 204, description: 'Application approved.' })
   @ApiResponse({ status: 409, description: 'Invalid state transition.' })
-  approve(@Param('id') id: string, @Body() dto: ApproveOrganizerDto): Promise<void> {
-    return this.organizersService.approve(id, dto.note);
+  approve(
+    @Param('id') id: string,
+    @Body() dto: ApproveOrganizerDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<void> {
+    // user.id is the local UserEntity.id — never user.sub (T-09-01-03; see src/types/auth.ts)
+    return this.organizersService.approve(id, user.id, dto.note);
   }
 
   @Roles('admin')
@@ -47,7 +55,12 @@ export class AdminOrganizersController {
   @ApiOperation({ summary: 'Reject an organizer application (admin only)' })
   @ApiResponse({ status: 204, description: 'Application rejected.' })
   @ApiResponse({ status: 409, description: 'Invalid state transition.' })
-  reject(@Param('id') id: string, @Body() dto: RejectOrganizerDto): Promise<void> {
-    return this.organizersService.reject(id, dto.note);
+  reject(
+    @Param('id') id: string,
+    @Body() dto: RejectOrganizerDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<void> {
+    // user.id is the local UserEntity.id — never user.sub (T-09-01-03; see src/types/auth.ts)
+    return this.organizersService.reject(id, user.id, dto.note);
   }
 }
