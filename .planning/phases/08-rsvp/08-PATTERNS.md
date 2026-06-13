@@ -14,7 +14,7 @@
 | `src/rsvp/dto/create-rsvp.dto.ts` | utility | request-response | `src/events/dto/event-pagination-query.dto.ts` | role-match |
 | `src/rsvp/dto/rsvp-history-item.dto.ts` | utility | request-response | `src/events/dto/public-event-list-item.dto.ts` | role-match |
 | `src/rsvp/dto/paginated-rsvp-history.dto.ts` | utility | request-response | `src/events/dto/paginated-events-response.dto.ts` | exact |
-| `src/events/events.controller.ts` | controller | request-response | `src/organizers/organizers.controller.ts` | exact |
+| `src/events/events-rsvp.controller.ts` | controller | request-response | `src/organizers/organizers.controller.ts` | exact |
 | `src/events/public-events.service.ts` | service | request-response | `src/events/events.service.ts` (findPublishedById) | exact |
 | `src/me/me.controller.ts` | controller | request-response | `src/organizers/organizers.controller.ts` | exact |
 | `src/me/me.module.ts` | config | request-response | `src/organizers/organizers.module.ts` | exact |

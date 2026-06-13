@@ -227,8 +227,10 @@ private static decodeCursor(cursor: string): { cursorFieldA: string; cursorId: s
     - Test: upsertRsvp() calls repository insert().orUpdate() and returns fetched entity
     - Test: upsertRsvp() throws NotFoundException when event does not exist
     - Test: upsertRsvp() throws UnprocessableEntityException when event.status != PUBLISHED
-    - Test: cancelRsvp() calls repository.update({ userId, eventId }, { state: CANCELLED }) and returns void
-    - Test: cancelRsvp() throws NotFoundException when no RSVP row found
+    - Test: cancelRsvp() happy path — mockRepo.findOne.mockResolvedValue(mockRsvpRow); assert
+      repository.update({ userId, eventId }, { state: CANCELLED }) called; returns void
+    - Test: cancelRsvp() throws NotFoundException when no RSVP row found —
+      mockRepo.findOne.mockResolvedValue(null)
     - Test: listUserRsvps() returns paginated envelope { data, nextCursor, hasMore }
     - Test: listUserRsvps() filters out CANCELLED RSVPs (WHERE state != CANCELLED)
     - Test: listUserRsvps() with cursor decodes and applies < comparison
@@ -271,8 +273,11 @@ private static decodeCursor(cursor: string): { cursorFieldA: string; cursorId: s
     - returns interestedCount as a number in the DTO
     - returns goingCount as a number in the DTO
     - calls rsvpService.countByEventAndState() twice (once per state)
-    Add mockRsvpService = { countByEventAndState: jest.fn() } to the existing TestingModule
-    providers. Import RsvpService from '../rsvp/rsvp.service' (RED).
+    Add a mock variable and a NestJS provider entry to the existing TestingModule:
+      const mockRsvpService = { countByEventAndState: jest.fn() };
+      // in TestingModule providers array — MUST use { provide, useValue } form:
+      { provide: RsvpService, useValue: mockRsvpService }
+    Import RsvpService from '../rsvp/rsvp.service' (RED).
 
     Verify RED state: run `pnpm test --passWithNoTests 2>&1 | grep -E "Cannot find module|FAIL"`.
     Expected: "Cannot find module" errors for rsvp.service, rsvp.entity, events-rsvp.controller,
@@ -459,16 +464,28 @@ private static decodeCursor(cursor: string): { cursorFieldA: string; cursorId: s
     - Implement cancelRsvp(userId: string, eventId: string): Promise<void>
       per behavior above.
     - Implement listUserRsvps(userId: string, query: RsvpHistoryQueryDto): Promise<PaginatedRsvpHistoryDto>
-      per behavior above. leftJoinAndSelect('rsvp.event', 'event') is NOT available without
-      @ManyToOne on the entity. Use leftJoinAndMapOne instead:
-        qb.leftJoinAndMapOne('rsvp.event', EventEntity, 'event', 'event.id = rsvp."eventId"')
-      OR query separately with IN clause on eventIds. Simpler: add @ManyToOne relation to RsvpEntity
-      only if needed for the join. Per PATTERNS.md, Phase 8 uses scalar FKs — use separate query
-      approach: fetch RSVPs, then fetch events by id IN (...) in one query, map together.
+      per behavior above. RsvpEntity has no @ManyToOne relation (scalar FKs only per PATTERNS.md).
+      Use leftJoinAndMapOne to fetch event data in one query — this is the committed approach:
+        const qb = this.rsvpRepository.createQueryBuilder('rsvp')
+          .leftJoinAndMapOne('rsvp.event', EventEntity, 'event', 'event.id = rsvp.eventId')
+          .where('rsvp.userId = :userId', { userId })
+          .andWhere("rsvp.state != :cancelled", { cancelled: RsvpState.CANCELLED })
+          .orderBy('rsvp.rsvpedAt', 'DESC')
+          .addOrderBy('rsvp.id', 'ASC')
+          .take(effectiveLimit + 1);
+        if (query.cursor) {
+          const { cursorRsvpedAt, cursorRsvpId } = RsvpService.decodeCursor(query.cursor);
+          qb.andWhere(
+            '(rsvp.rsvpedAt, rsvp.id) < (:cursorRsvpedAt::timestamptz, :cursorRsvpId)',
+            { cursorRsvpedAt, cursorRsvpId }
+          );
+        }
+        const rows = await qb.getMany() as (RsvpEntity & { event: EventEntity })[];
       Return PaginatedRsvpHistoryDto with mapped RsvpHistoryItemDto items.
-      toRsvpHistoryItemDto(rsvp, event): { rsvpState: rsvp.state, rsvpedAt: rsvp.rsvpedAt,
-        event: { id: event.id, title: event.title, startAt: event.startAt,
-                 city: event.city, imageUrl: event.imageUrl } }
+      toRsvpHistoryItemDto(rsvp: RsvpEntity & { event: EventEntity }): RsvpHistoryItemDto
+        { rsvpState: rsvp.state, rsvpedAt: rsvp.rsvpedAt,
+          event: { id: rsvp.event.id, title: rsvp.event.title, startAt: rsvp.event.startAt,
+                   city: rsvp.event.city, imageUrl: rsvp.event.imageUrl } }
     - Implement countByEventAndState(eventId: string, state: RsvpState): Promise<number>
       per behavior above.
     - Private static encodeCursor(rsvpedAt: Date, rsvpId: string): string
@@ -478,11 +495,13 @@ private static decodeCursor(cursor: string): { cursorFieldA: string; cursorId: s
 
     src/rsvp/rsvp.module.ts:
     - @Module({
-        imports: [TypeOrmModule.forFeature([RsvpEntity]), TypeOrmModule.forFeature([EventEntity])],
-        — NOTE: EventEntity is imported here so RsvpService can inject EventRepository for the
-          PUBLISHED guard. Alternatively, export only RsvpService and import EventsModule — but that
-          creates a circular dependency risk. Own the EventEntity import in RsvpModule directly.
-          Verify there is no circular import: RsvpModule → TypeOrmModule (no circular).
+        imports: [TypeOrmModule.forFeature([RsvpEntity, EventEntity])],
+        // RsvpModule registers EventEntity here so RsvpService can inject
+        // @InjectRepository(EventEntity) for the PUBLISHED guard in upsertRsvp().
+        // TypeORM handles multiple forFeature() registrations of the same entity across
+        // modules safely — each module gets its own repository token.
+        // EventsModule also registers EventEntity independently; no circular dependency
+        // exists (RsvpModule → TypeOrmModule only).
         providers: [RsvpService],
         exports: [RsvpService],
       })

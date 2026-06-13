@@ -1,0 +1,37 @@
+Task 6 — Human Verification (blocking gate)
+
+  Prerequisites: pnpm start:dev running, valid Auth0 JWT, at least one PUBLISHED event in DB.
+
+  1. RSVP-01 — Upsert semantics
+  POST /api/v1/events/{eventId}/rsvp   { "state": "INTERESTED" }
+  → 201 { id, state: "INTERESTED", rsvpedAt }
+
+  POST again:  { "state": "GOING" }
+  → 201, same id, same rsvpedAt, state: "GOING"
+
+  2. RSVP-03 — Counts on event detail
+  GET /api/v1/events/{eventId}
+  → includes "interestedCount": 0, "goingCount": 1
+
+  3. RSVP-04 — History
+  GET /api/v1/me/rsvps
+  → 200 { data: [{ rsvpState, rsvpedAt, event: {...} }], nextCursor: null, hasMore: false }
+
+  4. RSVP-02 — Cancel
+  DELETE /api/v1/events/{eventId}/rsvp  → 204
+  GET /api/v1/me/rsvps                  → empty data []
+  GET /api/v1/events/{eventId}          → counts both 0
+
+  5. Re-RSVP after cancel
+  POST /api/v1/events/{eventId}/rsvp   { "state": "INTERESTED" }
+  → 201, same row id as original (upsert, not new row)
+
+  6. Guard on non-PUBLISHED event
+  POST /api/v1/events/{draftEventId}/rsvp
+  → 422 (or 404 if not found)
+
+  7. Swagger
+  http://localhost:3000/api/docs
+  → RSVP endpoints under "Events" + "Me" tags
+
+  ---
