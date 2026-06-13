@@ -220,11 +220,13 @@ Plans:
   2. Admin can list all events including drafts and unpublished events (organizers only see their own)
   3. Admin can approve or reject a pending organizer application
   4. Admin can unpublish or soft-delete any event regardless of organizer ownership
-**Plans**: TBD
+**Plans**: 4 plans in 3 waves
 
 Plans:
-- [ ] 09-01: AdminModule — organizer list (filtered by status), organizer approve/reject endpoints
-- [ ] 09-02: Admin event list (all statuses), admin unpublish/remove event endpoints
+- [ ] 09-01-PLAN.md — Wave 1: Organizer admin surface — cursor pagination + adminUserId on approve/reject (ADMIN-01, ADMIN-03)
+- [ ] 09-02-PLAN.md — Wave 1: Event schema layer — EventStatus.SUSPENDED, statusBeforeSuspension, EventAuditLogEntity, admin DTOs, 2 migrations (EVT-03, ADMIN-02, ADMIN-04)
+- [ ] 09-03-PLAN.md — Wave 2: AdminEventsService + AdminEventsController + frozen-SUSPENDED guard + module wiring (EVT-03, ADMIN-02, ADMIN-04)
+- [ ] 09-04-PLAN.md — Wave 3: [BLOCKING] pnpm run migration:run + full suite + human verification
 
 ---
 
@@ -244,7 +246,7 @@ Plans:
 | 6. Organizer Event CRUD | 4/6 | In Progress|  |
 | 7. Public Event Discovery | 5/6 | In Progress|  |
 | 8. RSVP | 0/1 | Not started | - |
-| 9. Admin Moderation | 0/2 | Not started | - |
+| 9. Admin Moderation | 0/4 | Not started | - |
 
 ---
 
