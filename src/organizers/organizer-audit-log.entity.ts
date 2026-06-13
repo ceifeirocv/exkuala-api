@@ -32,6 +32,12 @@ export class OrganizerAuditLogEntity {
   @Column({ type: 'varchar', length: 2000, nullable: true })
   note: string | null;
 
+  // Which admin approved/rejected. Nullable: rows before Phase 9 have no acting admin recorded (D-12).
+  // name: 'adminUserId' matches migration DDL to prevent TypeORM sync drift (Phase 7 lesson).
+  @ApiPropertyOptional({ nullable: true })
+  @Column({ type: 'varchar', length: 30, nullable: true, name: 'adminUserId' })
+  adminUserId: string | null;
+
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

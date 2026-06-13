@@ -145,7 +145,8 @@ describe('OrganizersService', () => {
       mockAuditLogRepository.create.mockReturnValue(auditLog);
       mockAuditLogRepository.save.mockResolvedValue(auditLog);
 
-      await service.approve('org-01');
+      // approve(id, adminUserId, note?) — updated signature per ADMIN-03 (D-12)
+      await service.approve('org-01', 'admin-01');
 
       expect(mockOrganizerRepository.save).toHaveBeenCalled();
       expect(mockAuditLogRepository.save).toHaveBeenCalled();
@@ -160,7 +161,7 @@ describe('OrganizersService', () => {
 
       mockOrganizerRepository.findOne.mockResolvedValue(organizer);
 
-      await expect(service.approve('org-01')).rejects.toThrow(ConflictException);
+      await expect(service.approve('org-01', 'admin-01')).rejects.toThrow(ConflictException);
     });
 
     it('inserts audit log with action APPROVED and optional note', async () => {
@@ -175,7 +176,8 @@ describe('OrganizersService', () => {
       mockAuditLogRepository.create.mockReturnValue({ action: OrganizerAuditAction.APPROVED, note: 'Great application' });
       mockAuditLogRepository.save.mockResolvedValue({});
 
-      await service.approve('org-01', 'Great application');
+      // approve(id, adminUserId, note?) — updated signature per ADMIN-03 (D-12)
+      await service.approve('org-01', 'admin-01', 'Great application');
 
       expect(mockAuditLogRepository.create).toHaveBeenCalledWith(
         expect.objectContaining({ action: OrganizerAuditAction.APPROVED, note: 'Great application' }),
@@ -196,7 +198,8 @@ describe('OrganizersService', () => {
       mockAuditLogRepository.create.mockReturnValue({ action: OrganizerAuditAction.REJECTED, note: 'Incomplete info' });
       mockAuditLogRepository.save.mockResolvedValue({});
 
-      await service.reject('org-01', 'Incomplete info');
+      // reject(id, adminUserId, note?) — updated signature per ADMIN-03 (D-12)
+      await service.reject('org-01', 'admin-01', 'Incomplete info');
 
       expect(mockAuditLogRepository.save).toHaveBeenCalled();
     });
@@ -210,7 +213,7 @@ describe('OrganizersService', () => {
 
       mockOrganizerRepository.findOne.mockResolvedValue(organizer);
 
-      await expect(service.reject('org-01')).rejects.toThrow(ConflictException);
+      await expect(service.reject('org-01', 'admin-01')).rejects.toThrow(ConflictException);
     });
   });
 

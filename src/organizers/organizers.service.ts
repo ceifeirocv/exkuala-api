@@ -12,6 +12,8 @@ import { OrganizerAuditLogEntity, OrganizerAuditAction } from './organizer-audit
 import { CreateOrganizerDto } from './dto/create-organizer.dto';
 import { OrganizerPublicResponseDto } from './dto/organizer-public-response.dto';
 import { OrganizerSelfResponseDto } from './dto/organizer-self-response.dto';
+import { OrganizerPaginationQueryDto } from './dto/organizer-pagination-query.dto';
+import { PaginatedOrganizersResponseDto } from './dto/paginated-organizers-response.dto';
 
 @Injectable()
 export class OrganizersService {
@@ -75,9 +77,10 @@ export class OrganizersService {
   }
 
   // approve() — transitions pending → approved and inserts an immutable audit log row.
+  // adminUserId: acting admin's UserEntity.id (from @CurrentUser().id, never from request body — T-09-01-03).
   // Sequential saves (not transactional) per RESEARCH.md open question 3 for Phase 5.
   // TODO: wrap in a transaction in a future phase if audit reliability becomes a hard requirement.
-  async approve(id: string, note?: string): Promise<void> {
+  async approve(id: string, adminUserId: string, note?: string): Promise<void> {
     const organizer = await this.findOrganizerOrThrow(id);
     this.assertTransitionAllowed(organizer.status, OrganizerStatus.APPROVED);
     organizer.status = OrganizerStatus.APPROVED;
@@ -87,14 +90,16 @@ export class OrganizersService {
       id: createId(),
       organizerId: id,
       action: OrganizerAuditAction.APPROVED,
+      adminUserId,
       note: note ?? null,
     });
     await this.auditLogRepository.save(log);
   }
 
   // reject() — transitions pending → rejected with optional note; inserts audit log row.
+  // adminUserId: acting admin's UserEntity.id (from @CurrentUser().id — T-09-01-03).
   // Symmetric to approve(). Sequential saves per Phase 5 scope.
-  async reject(id: string, note?: string): Promise<void> {
+  async reject(id: string, adminUserId: string, note?: string): Promise<void> {
     const organizer = await this.findOrganizerOrThrow(id);
     this.assertTransitionAllowed(organizer.status, OrganizerStatus.REJECTED);
     organizer.status = OrganizerStatus.REJECTED;
@@ -103,9 +108,51 @@ export class OrganizersService {
       id: createId(),
       organizerId: id,
       action: OrganizerAuditAction.REJECTED,
+      adminUserId,
       note: note ?? null,
     });
     await this.auditLogRepository.save(log);
+  }
+
+  // findByStatusPaginated() — replaces findByStatus() for admin list (D-10, ADMIN-01).
+  // Cursor keyset: (createdAt, id) ASC — organizers have no startAt field (RESEARCH.md Pitfall 6).
+  // Fetches limit+1 to detect hasMore without a COUNT query.
+  async findByStatusPaginated(query: OrganizerPaginationQueryDto): Promise<PaginatedOrganizersResponseDto> {
+    const effectiveLimit = Math.min(query.limit ?? 20, 100);
+    const qb = this.organizerRepository
+      .createQueryBuilder('organizer')
+      .orderBy('organizer.createdAt', 'ASC')
+      .addOrderBy('organizer.id', 'ASC')
+      .take(effectiveLimit + 1);
+
+    if (query.status) {
+      qb.where('organizer."status" = :status', { status: query.status });
+    }
+    if (query.cursor) {
+      const { cursorCreatedAt, cursorId } = OrganizersService.decodeCursor(query.cursor);
+      qb.andWhere(
+        '(organizer."createdAt", organizer."id") > (:cursorCreatedAt::timestamptz, :cursorId)',
+        { cursorCreatedAt, cursorId },
+      );
+    }
+
+    const rows = await qb.getMany();
+    const hasMore = rows.length > effectiveLimit;
+    const data = hasMore ? rows.slice(0, effectiveLimit) : rows;
+    const lastItem = data[data.length - 1];
+    const nextCursor =
+      hasMore && lastItem ? OrganizersService.encodeCursor(lastItem.createdAt, lastItem.id) : null;
+    return { data, nextCursor, hasMore };
+  }
+
+  private static encodeCursor(createdAt: Date, id: string): string {
+    return Buffer.from(`${createdAt.toISOString()}__${id}`).toString('base64url');
+  }
+
+  private static decodeCursor(cursor: string): { cursorCreatedAt: string; cursorId: string } {
+    const raw = Buffer.from(cursor, 'base64url').toString('utf8');
+    const [cursorCreatedAt, cursorId] = raw.split('__');
+    return { cursorCreatedAt, cursorId };
   }
 
   // findApprovedById() — used by GET /organizers/:id (public profile).
