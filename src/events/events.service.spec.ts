@@ -178,6 +178,20 @@ describe('EventsService', () => {
       await expect(Promise.reject(new ConflictException())).rejects.toThrow(ConflictException);
     });
 
+    it('throws ConflictException when patching a suspended event (D-01 / Phase 9)', async () => {
+      // Suspended events are frozen — organizer cannot modify them, same as cancelled (D-01)
+      const suspendedEvent = {
+        id: 'evt-01',
+        organizerId: 'org-01',
+        status: EventStatus.SUSPENDED,
+      } as EventEntity;
+      mockEventRepository.findOne.mockResolvedValue(suspendedEvent);
+
+      await expect(
+        service.update('org-01', 'evt-01', { title: 'New Title' }),
+      ).rejects.toThrow(ConflictException);
+    });
+
     it('throws NotFoundException for non-owned event', async () => {
       await expect(Promise.reject(new NotFoundException())).rejects.toThrow(NotFoundException);
     });
