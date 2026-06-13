@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate": "pnpm run build && npx typeorm migration:generate src/database/migrations/migration -d dist/database/data-source.js",
-    "migration:run": "pnpm run build && npx typeorm migration:run -d dist/database/data-source.js",
+    "migration:run": "pnpm run build && npx typeorm migration:run -d dist/database/data-source.js -t each",
     "migration:revert": "pnpm run build && npx typeorm migration:revert -d dist/database/data-source.js",
     "seed:categories": "pnpm run build && node dist/database/seeds/categories.seed.js"
   },
