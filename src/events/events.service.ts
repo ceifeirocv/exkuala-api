@@ -110,9 +110,9 @@ export class EventsService {
   async update(organizerId: string, eventId: string, dto: UpdateEventDto): Promise<EventResponseDto> {
     const event = await this.findOwnedOrThrow(eventId, organizerId);
 
-    if (event.status === EventStatus.CANCELLED) {
+    if (event.status === EventStatus.CANCELLED || event.status === EventStatus.SUSPENDED) {
       throw new ConflictException(
-        `Event '${eventId}' is cancelled — cancelled events cannot be modified`,
+        `Event '${eventId}' is ${event.status.toLowerCase()} — ${event.status.toLowerCase()} events cannot be modified`,
       );
     }
 
