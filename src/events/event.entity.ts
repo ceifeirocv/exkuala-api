@@ -11,6 +11,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { OrganizerEntity } from '../organizers/organizer.entity';
 import { CategoryEntity } from '../categories/category.entity';
 import { EventTranslationEntity } from './event-translation.entity';
@@ -19,6 +20,7 @@ export enum EventStatus {
   DRAFT = 'DRAFT',
   PUBLISHED = 'PUBLISHED',
   CANCELLED = 'CANCELLED',
+  SUSPENDED = 'SUSPENDED', // admin-only state (Phase 9 D-01)
 }
 
 @Entity('events')
@@ -83,6 +85,19 @@ export class EventEntity {
     default: EventStatus.DRAFT,
   })
   status: EventStatus;
+
+  // Remembers pre-suspend status for admin restore (D-02, D-03).
+  // nullable — only set when status is SUSPENDED; null on all other events.
+  // name: 'statusBeforeSuspension' matches migration DDL to prevent TypeORM sync drift (Phase 7 lesson).
+  @ApiPropertyOptional({ enum: EventStatus, nullable: true })
+  @Column({
+    type: 'enum',
+    enum: EventStatus,
+    enumName: 'event_status',
+    nullable: true,
+    name: 'statusBeforeSuspension',
+  })
+  statusBeforeSuspension: EventStatus | null;
 
   @Column({ type: 'varchar', length: 30, nullable: true })
   // TypeScript type is string (not null) per D-24: organizerId always set at create time.

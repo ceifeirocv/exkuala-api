@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Query } from
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { AuthenticatedUser } from '../types/auth';
+import type { AuthenticatedUser } from '../types/auth';
 import { OrganizersService } from './organizers.service';
 import { OrganizerAuditLogEntity } from './organizer-audit-log.entity';
 import { ApproveOrganizerDto } from './dto/approve-organizer.dto';
